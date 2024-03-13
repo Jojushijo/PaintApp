@@ -82,6 +82,27 @@ static void DisplayMainMenuBar()
             }
             ImGui::EndMenu();
         }
+
+        // Filter menu
+        if (ImGui::BeginMenu("Filter"))
+        {
+            if (ImGui::MenuItem("Blur"))
+            {
+            }
+            ImGui::EndMenu();
+        }
+
+        // Filter menu
+        /* if (ImGui::BeginMenu("Help"))
+        {
+            if (ImGui::MenuItem("Docs"))
+            {
+            }
+
+            if (ImGui::MenuItem("About"))
+            {
+            }
+        }*/
         ImGui::EndMainMenuBar();
     }
 }
