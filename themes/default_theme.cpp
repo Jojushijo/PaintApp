@@ -35,7 +35,7 @@ namespace Default
         colors[ImGuiCol_ButtonActive] = ImGui::ColorConvertU32ToFloat4(Default::GRAY200);
         colors[ImGuiCol_Header] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE400);
         colors[ImGuiCol_HeaderHovered] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE500);
-        colors[ImGuiCol_HeaderActive] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE600);
+        colors[ImGuiCol_HeaderActive] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE700);
         colors[ImGuiCol_Separator] = ImGui::ColorConvertU32ToFloat4(Default::GRAY400);
         colors[ImGuiCol_SeparatorHovered] = ImGui::ColorConvertU32ToFloat4(Default::GRAY600);
         colors[ImGuiCol_SeparatorActive] = ImGui::ColorConvertU32ToFloat4(Default::GRAY700);
@@ -43,9 +43,9 @@ namespace Default
         colors[ImGuiCol_ResizeGripHovered] = ImGui::ColorConvertU32ToFloat4(Default::GRAY600);
         colors[ImGuiCol_ResizeGripActive] = ImGui::ColorConvertU32ToFloat4(Default::GRAY700);
         colors[ImGuiCol_PlotLines] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE400);
-        colors[ImGuiCol_PlotLinesHovered] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE600);
+        colors[ImGuiCol_PlotLinesHovered] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE700);
         colors[ImGuiCol_PlotHistogram] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE400);
-        colors[ImGuiCol_PlotHistogramHovered] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE600);
+        colors[ImGuiCol_PlotHistogramHovered] = ImGui::ColorConvertU32ToFloat4(Default::ORANGE700);
         colors[ImGuiCol_TextSelectedBg] = ImGui::ColorConvertU32ToFloat4((Default::ORANGE400 & 0x00FFFFFF) | 0x33000000);
         colors[ImGuiCol_DragDropTarget] = ImVec4(1.00f, 1.00f, 0.00f, 0.90f);
         colors[ImGuiCol_NavHighlight] = ImGui::ColorConvertU32ToFloat4((Default::GRAY900 & 0x00FFFFFF) | 0x0A000000);

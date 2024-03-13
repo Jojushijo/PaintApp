@@ -12,16 +12,19 @@ Current goals:
             [ ] Image Save
             [ ] Image Save As
             [ ] Image Open
+                [ ] Open Recent
             [ ] Blur
 [ ][D] Make ToolBox
     [ ][D] Make tools (GUI)
         [ ] Brush
         [ ] Circle
         [ ] Line
+        [ ] Color picker
     [ ][J] Implement Tools
         [ ] Brush
         [ ] Circle
         [ ] Line
+        
 ----------
 Stretch goals:
 [ ][ ] Custom themeing
