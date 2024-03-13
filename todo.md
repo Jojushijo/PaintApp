@@ -11,3 +11,10 @@
 [ ][D] Make ToolBox
     [ ][D] Make tools (GUI)
     [ ][J] Implement Tools
+
+----------
+Stretch goals:
+[ ][ ] Custom themeing
+
+----------
+Libraries: SFML, Qt Framework, SDL, Cairo
