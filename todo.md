@@ -1,12 +1,12 @@
 Current goals:
-[ ][D] Make GUI theme
+[X][D] Make GUI theme
 [ ][J] Make canvas
     [ ][J] Basic functionality
         [ ][J] Draw dot
         [ ][J] Draw circle
         [ ][J] Draw line
-[ ][D] Make menu bar
-    [ ][D] Make menu (GUI)
+[X][D] Make menu bar
+    [X][D] Make menu (GUI)
     [ ][D] Make options (GUI)
         [ ][D] Implement Options
 [ ][D] Make ToolBox
