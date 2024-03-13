@@ -9,10 +9,19 @@ Current goals:
     [X][D] Make menu (GUI)
     [ ][D] Make options (GUI)
         [ ][D] Implement Options
+            [ ] Image Save
+            [ ] Image Save As
+            [ ] Image Open
+            [ ] Blur
 [ ][D] Make ToolBox
     [ ][D] Make tools (GUI)
+        [ ] Brush
+        [ ] Circle
+        [ ] Line
     [ ][J] Implement Tools
-
+        [ ] Brush
+        [ ] Circle
+        [ ] Line
 ----------
 Stretch goals:
 [ ][ ] Custom themeing
