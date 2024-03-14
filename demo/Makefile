@@ -62,7 +62,7 @@ endif
 
 ifeq ($(OS), Windows_NT)
     ECHO_MESSAGE = "MinGW"
-    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
+    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs libs/sdl2`
 
     CXXFLAGS += `pkg-config --cflags sdl2`
     CFLAGS = $(CXXFLAGS)
@@ -80,7 +80,7 @@ endif
 
 %.o:$(IMGUI_DIR)/backends/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
-
+ 
 all: $(EXE)
 	@echo Build complete for $(ECHO_MESSAGE)
 
