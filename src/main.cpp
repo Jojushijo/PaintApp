@@ -12,6 +12,8 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 #include <SDL.h>
+#include <SDL_image.h>
+
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
@@ -147,6 +149,11 @@ int main(int, char **)
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
+    // Set window icon
+    SDL_Surface *iconSurface = IMG_Load("../icons/icon.png");
+    SDL_SetWindowIcon(window, iconSurface);
+    SDL_FreeSurface(iconSurface);
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -160,7 +167,7 @@ int main(int, char **)
     io.ConfigViewportsNoTaskBarIcon = true;
 
     // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-    ImGuiStyle &style = ImGui::GetStyle();
+    // ImGuiStyle &style = ImGui::GetStyle();
     Default::StyleColorsDefault();
 
     // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)

@@ -18,14 +18,15 @@ EXE = paint
 IMGUI_DIR = ../
 SOURCES = main.cpp
 SOURCES += $(IMGUI_DIR)/imgui/imgui.cpp $(IMGUI_DIR)/imgui/imgui_demo.cpp $(IMGUI_DIR)/imgui/imgui_draw.cpp $(IMGUI_DIR)/imgui/imgui_tables.cpp $(IMGUI_DIR)/imgui/imgui_widgets.cpp
-SOURCES += $(IMGUI_DIR)/backends/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backends/imgui_impl_opengl3.cpp
+SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_opengl3.cpp
 SOURCES += $(IMGUI_DIR)/themes/default_theme.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-CXXFLAGS = -std=c++11 -I$(IMGUI_DIR)/imgui -I$(IMGUI_DIR)/backends -I$(IMGUI_DIR)/themes
+CXXFLAGS = -std=c++11 -I$(IMGUI_DIR)/imgui -I$(IMGUI_DIR)/backend -I$(IMGUI_DIR)/themes
 CXXFLAGS += -g -Wall -Wformat
+SOURCES += 
 LIBS =
 
 ##---------------------------------------------------------------------
@@ -45,7 +46,7 @@ LIBS =
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs`
+	LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs` -lSDL2_image
 
 	CXXFLAGS += `sdl2-config --cflags`
 	CFLAGS = $(CXXFLAGS)
@@ -61,13 +62,15 @@ endif
 # 	CFLAGS = $(CXXFLAGS)
 # endif
 # 
-# ifeq ($(OS), Windows_NT)
-#     ECHO_MESSAGE = "MinGW"
-#     LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
-# 
-#     CXXFLAGS += `pkg-config --cflags sdl2`
-#     CFLAGS = $(CXXFLAGS)
-# endif
+# LIBS += -lgdi32 -lopengl32 -lSDL2main -lSDL2 -lSDL2_image
+
+ifeq ($(OS), Windows_NT)
+    ECHO_MESSAGE = "MinGW"
+    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
+	
+    CXXFLAGS += `pkg-config --cflags sdl2`
+    CFLAGS = $(CXXFLAGS)
+endif
 
 ##---------------------------------------------------------------------
 ## BUILD RULES
@@ -79,7 +82,7 @@ endif
 %.o:$(IMGUI_DIR)/imgui/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
-%.o:$(IMGUI_DIR)/backends/%.cpp
+%.o:$(IMGUI_DIR)/backend/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 %.o:$(IMGUI_DIR)/themes/%.cpp
