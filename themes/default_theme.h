@@ -6,8 +6,7 @@
 // #define DEFAULT_USE_DARK_THEME
 #endif
 
-namespace Default
-{
+namespace Default {
     // a list of changes introduced to change the look of the widgets.
     // Collected here as const rather than being magic numbers spread
     // around imgui.cpp and imgui_widgets.cpp.
@@ -21,10 +20,8 @@ namespace Default
     // Sets the ImGui style to Default
     void StyleColorsDefault();
 
-    namespace
-    { // Unnamed namespace, since we only use this here.
-        unsigned int Color(unsigned int c)
-        {
+    namespace { // Unnamed namespace, since we only use this here.
+        unsigned int Color(unsigned int c) {
             // add alpha.
             // also swap red and blue channel for some reason.
             // todo: figure out why, and fix it.
@@ -37,13 +34,11 @@ namespace Default
     }
     // all colors are from http://default.corp.adobe.com/color.html
 
-    inline unsigned int color_alpha(unsigned int alpha, unsigned int c)
-    {
+    inline unsigned int color_alpha(unsigned int alpha, unsigned int c) {
         return ((alpha & 0xFF) << 24) | (c & 0x00FFFFFF);
     }
 
-    namespace Static
-    {                                         // static colors
+    namespace Static {                                         // static colors
         const unsigned int NONE = 0x00000000; // transparent
         const unsigned int WHITE = Color(0xFFFFFF);
         const unsigned int BLACK = Color(0x000000);

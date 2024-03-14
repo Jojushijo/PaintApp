@@ -24,7 +24,6 @@ Current goals:
         [ ] Brush
         [ ] Circle
         [ ] Line
-        
 ----------
 Stretch goals:
 [ ][ ] Custom themeing
