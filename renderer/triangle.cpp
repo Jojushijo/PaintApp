@@ -13,88 +13,6 @@
 #endif
 #include <iostream>
 
-// Top Menu
-static void DisplayMainMenuBar() {
-    if (ImGui::BeginMainMenuBar()) {
-        // File menu
-        if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("New")) {
-                std::cout << "New File" << std::endl;
-            }
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {
-            }
-            if (ImGui::BeginMenu("Open Recent")) {
-                // Dynamically generate list in future
-                ImGui::MenuItem("image_0.png");
-                if (ImGui::MenuItem("ming_ma.jpg")) {
-                    std::cout << "DO NOT OPEN" << std::endl;
-                }
-                ImGui::MenuItem("compsci.gif");
-                ImGui::EndMenu();
-            }
-            if (ImGui::MenuItem("Save", "Ctrl+S")) {
-            }
-            if (ImGui::MenuItem("Save As..")) {
-            }
-
-            ImGui::Separator();
-            if (ImGui::MenuItem("Quit", "Alt+F4")) {
-                std::exit(0);
-            }
-
-            ImGui::EndMenu();
-        }
-
-        // Edit menu
-        if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {
-            }
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
-            } // Disabled item
-            ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {
-            }
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {
-            }
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {
-            }
-            ImGui::EndMenu();
-        }
-
-        // Filter menu
-        if (ImGui::BeginMenu("Filter")) {
-            if (ImGui::MenuItem("Blur")) {
-            }
-            ImGui::EndMenu();
-        }
-
-        // Filter menu
-        /* if (ImGui::BeginMenu("Help"))
-        {
-            if (ImGui::MenuItem("Docs"))
-            {
-            }
-
-            if (ImGui::MenuItem("About"))
-            {
-            }
-        }*/
-        ImGui::EndMainMenuBar();
-    }
-}
-
-// ToolBox
-static void DisplayToolbox() {
-
-    ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
-    ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button("Paint");
-    ImGui::Button("Line");
-    ImGui::Button("Circle");
-    ImGui::End();
-}
-
-// Main code
 int main(int, char**) {
     // Setup SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
@@ -124,10 +42,6 @@ int main(int, char**) {
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
-    // Set window icon
-    SDL_Surface* iconSurface = IMG_Load("../icons/icon.png");
-    SDL_SetWindowIcon(window, iconSurface);
-    SDL_FreeSurface(iconSurface);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -141,8 +55,6 @@ int main(int, char**) {
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
 
-    //Custom Theme
-    Default::StyleColorsDefault();
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
@@ -163,10 +75,8 @@ int main(int, char**) {
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
-
         ImGui::NewFrame();
-        DisplayToolbox();
-        DisplayMainMenuBar();
+        //ImGui::End();
 
         // Rendering
         ImGui::Render();
