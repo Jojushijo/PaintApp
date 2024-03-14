@@ -1,11 +1,3 @@
-// Dear ImGui: standalone example application for SDL2 + OpenGL
-// (SDL is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
-
-// Learn about Dear ImGui:
-// - FAQ                  https://dearimgui.com/faq
-// - Getting Started      https://dearimgui.com/getting-started
-// - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
-// - Introduction, links and more at the top of imgui.cpp
 #include "default_theme.h"
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
@@ -93,8 +85,13 @@ static void DisplayMainMenuBar() {
 
 // ToolBox
 static void DisplayToolbox() {
-    ImGui::Begin("Toolbox");
-    ImGui::Text("Test");
+
+    ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
+    ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
+    ImGui::Button("Paint");
+    ImGui::Button("Line");
+    ImGui::Button("Circle");
+    ImGui::End();
 }
 
 // Main code
@@ -144,15 +141,8 @@ int main(int, char**) {
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
 
-    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
-    // ImGuiStyle &style = ImGui::GetStyle();
+    //Custom Theme
     Default::StyleColorsDefault();
-
-    // if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
-    // {
-    //     style.WindowRounding = 0.0f;
-    //     style.Colors[ImGuiCol_WindowBg].w = 1.0f;
-    // }
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
@@ -177,7 +167,6 @@ int main(int, char**) {
         ImGui::NewFrame();
         DisplayToolbox();
         DisplayMainMenuBar();
-        ImGui::End();
 
         // Rendering
         ImGui::Render();
@@ -189,8 +178,6 @@ int main(int, char**) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         // Update and Render additional Platform Windows
-        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
-        //  For this specific demo app we could also call SDL_GL_MakeCurrent(window, gl_context) directly)
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
             SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();

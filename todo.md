@@ -1,4 +1,5 @@
 Current goals:
+---------------------------------
 [X][D] Make GUI theme
 [ ][J] Make canvas
     [ ][J] Basic functionality
@@ -24,14 +25,14 @@ Current goals:
         [ ] Brush
         [ ] Circle
         [ ] Line
-----------
+---------------------------------
 Stretch goals:
 [ ][ ] Custom themeing
 [ ][ ] Undo redo
 [ ][ ] Paint bucket tool
 [ ][ ] Blur filter
 
------
+---------------------------------
 Requirements listing:
 [] Allow user to input, modify, add, delete the record, and display the updates. 
 [] Include class and inheritance 
@@ -45,5 +46,5 @@ Requirements listing:
 [] Include overloaded subprogram, and generic subprogram
 [] Include some code with functional programming features
 
-----------
+---------------------------------
 Libraries: SFML, Qt Framework, SDL, Cairo
