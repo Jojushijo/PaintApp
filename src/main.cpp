@@ -93,7 +93,7 @@ static void DisplayMainMenuBar() {
 
 // ToolBox
 static void DisplayToolbox() {
-    ImGui::Begin("Toolbox!");
+    ImGui::Begin("Toolbox");
     ImGui::Text("Test");
 }
 

@@ -133,17 +133,16 @@ namespace Default {
 
 #ifdef DEFAULT_USE_DARK_THEME
     const unsigned int GRAY50 = Color(0x252525);
-    const unsigned int GRAY75 = Color(0x2F2F2F);
-    const unsigned int GRAY100 = Color(0x323232);
-    const unsigned int GRAY200 = Color(0x393939);
-    const unsigned int GRAY300 = Color(0x3E3E3E);
-    const unsigned int GRAY400 = Color(0x4D4D4D);
-    const unsigned int GRAY500 = Color(0x5C5C5C);
-    const unsigned int GRAY600 = Color(0x7B7B7B);
-    const unsigned int GRAY700 = Color(0x999999);
-    const unsigned int GRAY800 = Color(0xCDCDCD);
-    const unsigned int GRAY900 = Color(0xFFFFFF);
-    const unsigned int GRAY1000 = Color(0xFFFFFF);
+    const unsigned int GRAY75 = Color(0x2a2a2a);
+    const unsigned int GRAY100 = Color(0x2f2f2f);
+    const unsigned int GRAY200 = Color(0x454545);
+    const unsigned int GRAY300 = Color(0x5d5d5d);
+    const unsigned int GRAY400 = Color(0x767676);
+    const unsigned int GRAY500 = Color(0x909090);
+    const unsigned int GRAY600 = Color(0xaaaaaa);
+    const unsigned int GRAY700 = Color(0xc6c6c6);
+    const unsigned int GRAY800 = Color(0xe2e2e2);
+    const unsigned int GRAY900 = Color(0xffffff);
     const unsigned int BLUE400 = Color(0x2680EB);
     const unsigned int BLUE500 = Color(0x378EF0);
     const unsigned int BLUE600 = Color(0x4B9CF5);
@@ -153,8 +152,8 @@ namespace Default {
     const unsigned int RED600 = Color(0xF76D74);
     const unsigned int RED700 = Color(0xFF7B82);
     const unsigned int ORANGE400 = Color(0xE68619);
-    const unsigned int ORANGE500 = Color(0xF29423);
-    const unsigned int ORANGE600 = Color(0xF9A43F);
+    const unsigned int ORANGE500 = Color(0xef9634);
+    const unsigned int ORANGE600 = Color(0xf7a549);
     const unsigned int ORANGE700 = Color(0xFFB55B);
     const unsigned int GREEN400 = Color(0x2D9D78);
     const unsigned int GREEN500 = Color(0x33AB84);
@@ -189,8 +188,8 @@ namespace Default {
     const unsigned int CHARTREUSE600 = Color(0x9BEC54);
     const unsigned int CHARTREUSE700 = Color(0xA3F858);
     const unsigned int PURPLE400 = Color(0x9256D9);
-    const unsigned int PURPLE500 = Color(0x9D64E1);
-    const unsigned int PURPLE600 = Color(0xA873E9);
+    const unsigned int PURPLE500 = Color(0x9d65e1);
+    const unsigned int PURPLE600 = Color(0xa874e8);
     const unsigned int PURPLE700 = Color(0xB483F0);
 #endif
 }
