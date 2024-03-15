@@ -13,6 +13,32 @@
 #endif
 #include <iostream>
 
+#include <SDL_image.h>
+
+bool LoadTextureFromFile(const char* filename, SDL_Texture** texture_ptr, int& width, int& height, SDL_Renderer* renderer) {
+    SDL_Surface* surface = IMG_Load(filename);
+
+    if (surface == nullptr) {
+        fprintf(stderr, "Failed to load image: %s\n", IMG_GetError());
+        return false;
+    }
+
+    *texture_ptr = SDL_CreateTextureFromSurface(renderer, surface);
+
+    if (*texture_ptr == nullptr) {
+        fprintf(stderr, "Failed to create SDL texture: %s\n", SDL_GetError());
+        SDL_FreeSurface(surface);
+        return false;
+    }
+
+    width = surface->w;
+    height = surface->h;
+
+    SDL_FreeSurface(surface);
+    return true;
+}
+
+
 // Top Menu
 static void DisplayMainMenuBar() {
     if (ImGui::BeginMainMenuBar()) {
@@ -84,13 +110,21 @@ static void DisplayMainMenuBar() {
 }
 
 // ToolBox
-static void DisplayToolbox() {
-
+static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
     ImGui::Button("Paint");
     ImGui::Button("Line");
     ImGui::Button("Circle");
+
+
+    SDL_Texture* my_texture;
+    int my_image_width, my_image_height;
+    bool ret = LoadTextureFromFile("../icons/bucket.png", &my_texture, my_image_width, my_image_height, renderer);
+
+    ImGui::ImageButton(ImGui::GetIO().Fonts->TexID, ImVec2(my_image_width, my_image_height), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)))
+
+
     ImGui::End();
 }
 
@@ -115,6 +149,8 @@ int main(int, char**) {
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Window* window = SDL_CreateWindow("Sumi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+
     if (window == nullptr) {
         printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
         return -1;
@@ -165,7 +201,7 @@ int main(int, char**) {
         ImGui_ImplSDL2_NewFrame();
 
         ImGui::NewFrame();
-        DisplayToolbox();
+        DisplayToolbox(renderer);
         DisplayMainMenuBar();
 
         // Rendering
