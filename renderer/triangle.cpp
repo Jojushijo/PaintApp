@@ -87,6 +87,68 @@ int main(int, char**) {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
+        if (drawTriangle) {
+    // Define vertices of the triangle
+    float vertices[] = {
+        -0.5f, -0.5f, // Bottom-left vertex
+        0.5f, -0.5f,  // Bottom-right vertex
+        0.0f, 0.5f    // Top vertex
+    };
+    
+    // Create and bind a vertex buffer object (VBO)
+    GLuint VBO;
+    glGenBuffers(1, &VBO);
+    glBindBuffer(GL_ARRAY_BUFFER, VBO);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+    
+    // Create and compile the vertex shader
+    const char* vertexShaderSource = R"(
+        #version 130
+        in vec2 position;
+        void main() {
+            gl_Position = vec4(position.x, position.y, 0.0, 1.0);
+        }
+    )";
+    GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
+    glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
+    glCompileShader(vertexShader);
+    
+    // Create and compile the fragment shader
+    const char* fragmentShaderSource = R"(
+        #version 130
+        out vec4 fragColor;
+        void main() {
+            fragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
+        }
+    )";
+    GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
+    glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
+    glCompileShader(fragmentShader);
+    
+    // Link shaders
+    GLuint shaderProgram = glCreateProgram();
+    glAttachShader(shaderProgram, vertexShader);
+    glAttachShader(shaderProgram, fragmentShader);
+    glLinkProgram(shaderProgram);
+    glUseProgram(shaderProgram);
+    
+    // Specify the layout of the vertex data
+    GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
+    glEnableVertexAttribArray(posAttrib);
+    glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
+    
+    // Draw the triangle
+    glDrawArrays(GL_TRIANGLES, 0, 3);
+    
+    // Cleanup
+    glDeleteProgram(shaderProgram);
+    glDeleteShader(vertexShader);
+    glDeleteShader(fragmentShader);
+    glDeleteBuffers(1, &VBO);
+    
+    drawTriangle = false; // Reset flag
+}
+
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
