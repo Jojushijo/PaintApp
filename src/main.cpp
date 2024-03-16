@@ -113,10 +113,10 @@ static void DisplayMainMenuBar() {
 static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button(ICON_FA_PENCIL);
-    ImGui::Button(ICON_FA_BUCKET);
-    ImGui::Button(ICON_FA_PEN_NIB);
-    ImGui::Button(ICON_FA_CIRCLE_DOT); // ICON_FA_CIRCLE_NOTCH, ICON_FA_COMPASS_DRAFTING
+    ImGui::Button(ICON_FA_PENCIL " Draw");
+    ImGui::Button(ICON_FA_BUCKET " Fill");
+    ImGui::Button(ICON_FA_PEN_NIB " Line");
+    ImGui::Button(ICON_FA_COMPASS_DRAFTING " Circle"); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
     ImGui::End();
 }
 
@@ -219,6 +219,11 @@ int main(int, char**) {
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        style.WindowRounding = 6.0f;
+        style.FrameRounding = 6.0f;
+        style.PopupRounding = 6.0f;
+        style.GrabRounding = 6.0f;
 
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
