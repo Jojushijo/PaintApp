@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "sbl_image.h"
+#include "icons.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -12,8 +14,6 @@
 #include <SDL_opengl.h>
 #endif
 #include <iostream>
-
-#include <SDL_image.h>
 
 bool LoadTextureFromFile(const char* filename, SDL_Texture** texture_ptr, int& width, int& height, SDL_Renderer* renderer) {
     SDL_Surface* surface = IMG_Load(filename);
@@ -44,12 +44,12 @@ static void DisplayMainMenuBar() {
     if (ImGui::BeginMainMenuBar()) {
         // File menu
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("New")) {
+            if (ImGui::MenuItem(ICON_FA_FILE " New")) {
                 std::cout << "New File" << std::endl;
             }
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {
+            if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "Ctrl+O")) {
             }
-            if (ImGui::BeginMenu("Open Recent")) {
+            if (ImGui::BeginMenu(ICON_FA_BOX_ARCHIVE " Open Recent")) {
                 // Dynamically generate list in future
                 ImGui::MenuItem("image_0.png");
                 if (ImGui::MenuItem("ming_ma.jpg")) {
@@ -58,13 +58,13 @@ static void DisplayMainMenuBar() {
                 ImGui::MenuItem("compsci.gif");
                 ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Save", "Ctrl+S")) {
+            if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "Ctrl+S")) {
             }
-            if (ImGui::MenuItem("Save As..")) {
+            if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save As..")) {
             }
 
             ImGui::Separator();
-            if (ImGui::MenuItem("Quit", "Alt+F4")) {
+            if (ImGui::MenuItem(ICON_FA_X " Quit", "Alt+F4")) {
                 std::exit(0);
             }
 
@@ -73,22 +73,22 @@ static void DisplayMainMenuBar() {
 
         // Edit menu
         if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {
+            if (ImGui::MenuItem(ICON_FA_ARROW_ROTATE_LEFT " Undo", "CTRL+Z")) {
             }
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
+            if (ImGui::MenuItem(ICON_FA_ARROW_ROTATE_RIGHT " Redo", "CTRL+Y", false, false)) {
             } // Disabled item
             ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {
+            if (ImGui::MenuItem(ICON_FA_SCISSORS " Cut", "CTRL+X")) {
             }
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {
+            if (ImGui::MenuItem(ICON_FA_COPY " Copy", "CTRL+C")) {
             }
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {
+            if (ImGui::MenuItem(ICON_FA_PASTE " Paste", "CTRL+V")) {
             }
             ImGui::EndMenu();
         }
 
         // Filter menu
-        if (ImGui::BeginMenu("Filter")) {
+        if (ImGui::BeginMenu(ICON_FA_WAND_MAGIC_SPARKLES " Filter")) {
             if (ImGui::MenuItem("Blur")) {
             }
             ImGui::EndMenu();
@@ -111,20 +111,34 @@ static void DisplayMainMenuBar() {
 
 // ToolBox
 static void DisplayToolbox(SDL_Renderer* renderer) {
-    ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
+    ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button("Paint");
-    ImGui::Button("Line");
-    ImGui::Button("Circle");
 
+    // Draw Tool
+    ImGui::Button(ICON_FA_PENCIL);
+    ImGui::SetItemTooltip("Paint | CTRL+D");
 
-    SDL_Texture* my_texture;
-    int my_image_width, my_image_height;
-    bool ret = LoadTextureFromFile("../icons/bucket.png", &my_texture, my_image_width, my_image_height, renderer);
+    // Fill Tool
+    ImGui::SameLine();
+    ImGui::Button(ICON_FA_BUCKET);
+    ImGui::SetItemTooltip("Fill | CTRL+B");
 
-    ImGui::ImageButton(ImGui::GetIO().Fonts->TexID, ImVec2(my_image_width, my_image_height), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)))
+    // Line Tool
+    ImGui::SameLine();
+    ImGui::Button(ICON_FA_PEN_NIB);
+    ImGui::SetItemTooltip("Draw Line | CTRL+L");
 
+    // Circle Tool
+    ImGui::SameLine();
+    ImGui::Button(ICON_FA_COMPASS_DRAFTING); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
+    ImGui::SetItemTooltip("Draw Ellipse | CTRL+E");
 
+    ImGui::SeparatorText("Colors");
+
+    static float col1[3] = { 0.f, 0.0f, 0.0f };
+    static float col2[3] = { 1.0f, 1.0f, 1.00f };
+    ImGui::ColorEdit3("Primary", (float*)&col1);
+    ImGui::ColorEdit3("Secondary", (float*)&col2);
     ImGui::End();
 }
 
@@ -177,6 +191,20 @@ int main(int, char**) {
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
 
+    // Custom font/icons
+    float baseFontSize = 22.0f; // 13.0f is the size of the default font. Change to the font size you use.
+    io.Fonts->AddFontFromFileTTF("../icons/Proxima-Nova-Regular.ttf", baseFontSize);
+    float iconFontSize = baseFontSize * 2.0f / 3.0f; // FontAwesome fonts need to have their sizes reduced by 2.0f/3.0f in order to align correctly
+
+    // merge in icons from Font Awesome
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    icons_config.GlyphMinAdvanceX = iconFontSize;
+    // use "fa-regular-400.ttf" if you want regular instead of solid
+    io.Fonts->AddFontFromFileTTF("../icons/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
+
     //Custom Theme
     Default::StyleColorsDefault();
 
@@ -201,17 +229,22 @@ int main(int, char**) {
         ImGui_ImplSDL2_NewFrame();
 
         ImGui::NewFrame();
-        DisplayToolbox(renderer);
         DisplayMainMenuBar();
+        DisplayToolbox(renderer);
+
 
         // Rendering
         ImGui::Render();
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGuiStyle& style = ImGui::GetStyle();
-        ImVec4 clearColor = style.Colors[ImGuiCol_FrameBg];
+        ImVec4 clearColor = ImGui::ColorConvertU32ToFloat4(Default::GRAY100);
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        style.WindowRounding = 6.0f;
+        style.FrameRounding = 6.0f;
+        style.PopupRounding = 6.0f;
 
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
