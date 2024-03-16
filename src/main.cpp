@@ -113,11 +113,11 @@ static void DisplayMainMenuBar() {
 static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button(ICON_FA_PAINTBRUSH);
+    ImGui::Button(ICON_FA_PENCIL);
     ImGui::Button(ICON_FA_BUCKET);
     ImGui::Button(ICON_FA_PEN_NIB);
+    ImGui::Button(ICON_FA_CIRCLE_DOT); // ICON_FA_CIRCLE_NOTCH, ICON_FA_COMPASS_DRAFTING
     ImGui::End();
-
 }
 
 // Main code
@@ -170,8 +170,8 @@ int main(int, char**) {
     io.ConfigViewportsNoTaskBarIcon = true;
 
     // Custom font/icons
-    io.Fonts->AddFontDefault();
-    float baseFontSize = 13.0f; // 13.0f is the size of the default font. Change to the font size you use.
+    float baseFontSize = 22.0f; // 13.0f is the size of the default font. Change to the font size you use.
+    io.Fonts->AddFontFromFileTTF("../icons/Proxima-Nova-Regular.ttf", baseFontSize);
     float iconFontSize = baseFontSize * 2.0f / 3.0f; // FontAwesome fonts need to have their sizes reduced by 2.0f/3.0f in order to align correctly
 
     // merge in icons from Font Awesome
