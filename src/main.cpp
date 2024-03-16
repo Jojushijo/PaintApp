@@ -116,15 +116,6 @@ static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::Button("Paint");
     ImGui::Button("Line");
     ImGui::Button("Circle");
-
-
-    SDL_Texture* my_texture;
-    int my_image_width, my_image_height;
-    bool ret = LoadTextureFromFile("../icons/bucket.png", &my_texture, my_image_width, my_image_height, renderer);
-
-    ImGui::ImageButton(ImGui::GetIO().Fonts->TexID, ImVec2(my_image_width, my_image_height), ImVec2(0.0f, 0.0f), ImVec2(1.0f, 1.0f)))
-
-
     ImGui::End();
 }
 

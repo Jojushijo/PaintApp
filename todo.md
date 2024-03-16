@@ -15,7 +15,7 @@ Current goals:
             [ ] Image Open
                 [ ] Open Recent
             [ ] Blur
-[ ][D] Make ToolBox
+[X][D] Make ToolBox
     [ ][D] Make tools (GUI)
         [ ] Brush
         [ ] Circle
@@ -25,6 +25,7 @@ Current goals:
         [ ] Brush
         [ ] Circle
         [ ] Line
+        [ ] Color picker
 ---------------------------------
 Stretch goals:
 [ ][ ] Custom themeing
