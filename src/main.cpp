@@ -114,9 +114,13 @@ static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
     ImGui::Button(ICON_FA_PENCIL " Draw");
+    ImGui::SetItemTooltip("CTRL+D");
     ImGui::Button(ICON_FA_BUCKET " Fill");
-    ImGui::Button(ICON_FA_PEN_NIB " Line");
+    ImGui::SetItemTooltip("CTRL+B");
+    ImGui::Button(ICON_FA_PEN_NIB);
+    ImGui::SetItemTooltip("CTRL+L");
     ImGui::Button(ICON_FA_COMPASS_DRAFTING " Circle"); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
+    ImGui::SetItemTooltip("CTRL+E");
     ImGui::End();
 }
 
@@ -223,7 +227,6 @@ int main(int, char**) {
         style.WindowRounding = 6.0f;
         style.FrameRounding = 6.0f;
         style.PopupRounding = 6.0f;
-        style.GrabRounding = 6.0f;
 
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {

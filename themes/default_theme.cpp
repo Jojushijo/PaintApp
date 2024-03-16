@@ -8,7 +8,7 @@ namespace Default {
 
         // Making some transparency on elements that are potentially overlapping the image or other menus so things don't get hidden
         ImVec4 TRANSPARENTGRAY = ImGui::ColorConvertU32ToFloat4(Default::GRAY50);
-        TRANSPARENTGRAY.w = 0.9;
+        TRANSPARENTGRAY.w = 0.8;
 
         ImVec4* colors = style->Colors;
         colors[ImGuiCol_Text] = ImGui::ColorConvertU32ToFloat4(Default::GRAY900); // text on hovered controls is gray900
@@ -34,7 +34,7 @@ namespace Default {
         colors[ImGuiCol_SliderGrabActive] = ImGui::ColorConvertU32ToFloat4(Default::GRAY900);
         colors[ImGuiCol_Button] = ImGui::ColorConvertU32ToFloat4(Default::GRAY200); // match default button to Default's 'Action Button'.
         colors[ImGuiCol_ButtonHovered] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE500);
-        colors[ImGuiCol_ButtonActive] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE600);
+        colors[ImGuiCol_ButtonActive] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE400);
         colors[ImGuiCol_Header] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE400);
         colors[ImGuiCol_HeaderHovered] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE500);
         colors[ImGuiCol_HeaderActive] = ImGui::ColorConvertU32ToFloat4(Default::PURPLE600);

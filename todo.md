@@ -18,11 +18,12 @@ Current goals:
     [X] Add custom icons
 [X][D] Make ToolBox
     [ ][D] Make tools (GUI)
-        [ ] Brush
-        [ ] Bucket
-        [ ] Circle
-        [ ] Line
-        [ ] Color picker
+        [X] Brush
+        [X] Bucket
+        [X] Circle
+        [X] Line
+        [] Color picker
+    [X][D] Make tooltips
     [ ][J] Implement Tools
         [ ] Brush
         [ ] Bucket
