@@ -9,7 +9,7 @@ Current goals:
 [X][D] Make menu bar
     [X][D] Make menu (GUI)
     [X][D] Make options (GUI)
-        [ ][D] Implement Options
+        [ ][D] Implement Options (Requires canvas)
             [ ] Image Save
             [ ] Image Save As
             [ ] Image Open
@@ -17,12 +17,12 @@ Current goals:
             [ ] Blur
     [X] Add custom icons
 [X][D] Make ToolBox
-    [ ][D] Make tools (GUI)
+    [X][D] Make tools (GUI)
         [X] Brush
         [X] Bucket
         [X] Circle
         [X] Line
-        [] Color picker
+        [X] Color pickers
     [X][D] Make tooltips
     [ ][J] Implement Tools
         [ ] Brush
@@ -52,4 +52,4 @@ Requirements listing:
 [] Include some code with functional programming features
 
 ---------------------------------
-Libraries: SFML, Qt Framework, SDL, Cairo
+Libraries: SFML, Qt Framework, *SDL*, Cairo

@@ -111,16 +111,34 @@ static void DisplayMainMenuBar() {
 
 // ToolBox
 static void DisplayToolbox(SDL_Renderer* renderer) {
-    ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
+    ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button(ICON_FA_PENCIL " Draw");
-    ImGui::SetItemTooltip("CTRL+D");
-    ImGui::Button(ICON_FA_BUCKET " Fill");
-    ImGui::SetItemTooltip("CTRL+B");
+
+    // Draw Tool
+    ImGui::Button(ICON_FA_PENCIL);
+    ImGui::SetItemTooltip("Paint | CTRL+D");
+
+    // Fill Tool
+    ImGui::SameLine();
+    ImGui::Button(ICON_FA_BUCKET);
+    ImGui::SetItemTooltip("Fill | CTRL+B");
+
+    // Line Tool
+    ImGui::SameLine();
     ImGui::Button(ICON_FA_PEN_NIB);
-    ImGui::SetItemTooltip("CTRL+L");
-    ImGui::Button(ICON_FA_COMPASS_DRAFTING " Circle"); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
-    ImGui::SetItemTooltip("CTRL+E");
+    ImGui::SetItemTooltip("Draw Line | CTRL+L");
+
+    // Circle Tool
+    ImGui::SameLine();
+    ImGui::Button(ICON_FA_COMPASS_DRAFTING); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
+    ImGui::SetItemTooltip("Draw Ellipse | CTRL+E");
+
+    ImGui::SeparatorText("Colors");
+
+    static float col1[3] = { 0.f, 0.0f, 0.0f };
+    static float col2[3] = { 1.0f, 1.0f, 1.00f };
+    ImGui::ColorEdit3("Primary", (float*)&col1);
+    ImGui::ColorEdit3("Secondary", (float*)&col2);
     ImGui::End();
 }
 
@@ -219,7 +237,7 @@ int main(int, char**) {
         ImGui::Render();
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGuiStyle& style = ImGui::GetStyle();
-        ImVec4 clearColor = style.Colors[ImGuiCol_FrameBg];
+        ImVec4 clearColor = ImGui::ColorConvertU32ToFloat4(Default::GRAY100);
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());

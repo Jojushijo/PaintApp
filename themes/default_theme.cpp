@@ -18,7 +18,7 @@ namespace Default {
         colors[ImGuiCol_PopupBg] = TRANSPARENTGRAY; // not sure about this. Note: applies to tooltips too.
         colors[ImGuiCol_Border] = ImGui::ColorConvertU32ToFloat4(Default::GRAY300);
         colors[ImGuiCol_BorderShadow] = ImGui::ColorConvertU32ToFloat4(Default::Static::NONE); // We don't want shadows. Ever.
-        colors[ImGuiCol_FrameBg] = ImGui::ColorConvertU32ToFloat4(Default::GRAY75);            // this isnt right, Default does not do this, but it's a good fallback
+        colors[ImGuiCol_FrameBg] = ImGui::ColorConvertU32ToFloat4(Default::GRAY200);            // this isnt right, Default does not do this, but it's a good fallback
         colors[ImGuiCol_FrameBgHovered] = TRANSPARENTGRAY;
         colors[ImGuiCol_FrameBgActive] = ImGui::ColorConvertU32ToFloat4(Default::GRAY200);
         colors[ImGuiCol_TitleBg] = ImGui::ColorConvertU32ToFloat4(Default::GRAY300); // those titlebar values are totally made up, Default does not have this.
