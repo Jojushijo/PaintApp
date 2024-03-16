@@ -13,6 +13,8 @@
 #endif
 #include <iostream>
 
+bool drawSquare = false;
+
 int main(int, char**) {
     // Setup SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
@@ -42,7 +44,6 @@ int main(int, char**) {
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1); // Enable vsync
 
-
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -54,7 +55,6 @@ int main(int, char**) {
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
-
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
@@ -76,7 +76,11 @@ int main(int, char**) {
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
         ImGui::NewFrame();
-        //ImGui::End();
+
+        // Add a button to draw a square
+        if (ImGui::Button("Draw Square")) {
+            drawSquare = true;
+        }
 
         // Rendering
         ImGui::Render();
@@ -87,13 +91,14 @@ int main(int, char**) {
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
-         // Draw triangle if flag is set
-        if (drawTriangle) {
-            // Define vertices of the triangle
+        if (drawSquare) {
+            // Code to draw a square
+            // Define vertices of the square
             float vertices[] = {
                 -0.5f, -0.5f, // Bottom-left vertex
                 0.5f, -0.5f,  // Bottom-right vertex
-                0.0f, 0.5f    // Top vertex
+                0.5f, 0.5f,   // Top-right vertex
+                -0.5f, 0.5f   // Top-left vertex
             };
 
             // Create and bind a vertex buffer object (VBO)
@@ -103,75 +108,20 @@ int main(int, char**) {
             glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
             // Create and compile the vertex shader
-            const char* vertexShaderSource = R(
+            const char* vertexShaderSource = R"(
                 #version 130
                 in vec2 position;
                 void main() {
                     gl_Position = vec4(position.x, position.y, 0.0, 1.0);
                 }
-            );
+            )";
             GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
             glCompileShader(vertexShader);
 
             // Create and compile the fragment shader
-            const char* fragmentShaderSource = R(
+            const char* fragmentShaderSource = R"(
                 #version 130
                 out vec4 fragColor;
                 void main() {
-                    fragColor = vec4(1.0, 0.0, 0.0, 1.0); // Red color
-                }
-            );
-            GLuint fragmentShader = glCreateShader(GL_FRAGMENT_SHADER);
-            glShaderSource(fragmentShader, 1, &fragmentShaderSource, NULL);
-            glCompileShader(fragmentShader);
-
-            // Link shaders
-            GLuint shaderProgram = glCreateProgram();
-            glAttachShader(shaderProgram, vertexShader);
-            glAttachShader(shaderProgram, fragmentShader);
-            glLinkProgram(shaderProgram);
-            glUseProgram(shaderProgram);
-
-            // Specify the layout of the vertex data
-            GLint posAttrib = glGetAttribLocation(shaderProgram, "position");
-            glEnableVertexAttribArray(posAttrib);
-            glVertexAttribPointer(posAttrib, 2, GL_FLOAT, GL_FALSE, 0, 0);
-
-            // Draw the triangle
-            glDrawArrays(GL_TRIANGLES, 0, 3);
-
-            // Cleanup
-            glDeleteProgram(shaderProgram);
-            glDeleteShader(vertexShader);
-            glDeleteShader(fragmentShader);
-            glDeleteBuffers(1, &VBO);
-
-            drawTriangle = false; // Reset flag
-        }
-            
-
-
-        // Update and Render additional Platform Windows
-        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
-            SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
-            SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
-            ImGui::UpdatePlatformWindows();
-            ImGui::RenderPlatformWindowsDefault();
-            SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
-        }
-
-        SDL_GL_SwapWindow(window);
-    }
-
-    // Cleanup
-    ImGui_ImplOpenGL3_Shutdown();
-    ImGui_ImplSDL2_Shutdown();
-    ImGui::DestroyContext();
-
-    SDL_GL_DeleteContext(gl_context);
-    SDL_DestroyWindow(window);
-    SDL_Quit();
-
-    return 0;
-}
+                    fragColor = vec4(0.0, 0.
