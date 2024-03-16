@@ -44,12 +44,12 @@ static void DisplayMainMenuBar() {
     if (ImGui::BeginMainMenuBar()) {
         // File menu
         if (ImGui::BeginMenu("File")) {
-            if (ImGui::MenuItem("New")) {
+            if (ImGui::MenuItem(ICON_FA_FILE " New")) {
                 std::cout << "New File" << std::endl;
             }
-            if (ImGui::MenuItem("Open", "Ctrl+O")) {
+            if (ImGui::MenuItem(ICON_FA_FOLDER_OPEN " Open", "Ctrl+O")) {
             }
-            if (ImGui::BeginMenu("Open Recent")) {
+            if (ImGui::BeginMenu(ICON_FA_BOX_ARCHIVE " Open Recent")) {
                 // Dynamically generate list in future
                 ImGui::MenuItem("image_0.png");
                 if (ImGui::MenuItem("ming_ma.jpg")) {
@@ -58,13 +58,13 @@ static void DisplayMainMenuBar() {
                 ImGui::MenuItem("compsci.gif");
                 ImGui::EndMenu();
             }
-            if (ImGui::MenuItem("Save", "Ctrl+S")) {
+            if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save", "Ctrl+S")) {
             }
-            if (ImGui::MenuItem("Save As..")) {
+            if (ImGui::MenuItem(ICON_FA_FLOPPY_DISK " Save As..")) {
             }
 
             ImGui::Separator();
-            if (ImGui::MenuItem("Quit", "Alt+F4")) {
+            if (ImGui::MenuItem(ICON_FA_X " Quit", "Alt+F4")) {
                 std::exit(0);
             }
 
@@ -73,22 +73,22 @@ static void DisplayMainMenuBar() {
 
         // Edit menu
         if (ImGui::BeginMenu("Edit")) {
-            if (ImGui::MenuItem("Undo", "CTRL+Z")) {
+            if (ImGui::MenuItem(ICON_FA_ARROW_ROTATE_LEFT " Undo", "CTRL+Z")) {
             }
-            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {
+            if (ImGui::MenuItem(ICON_FA_ARROW_ROTATE_RIGHT " Redo", "CTRL+Y", false, false)) {
             } // Disabled item
             ImGui::Separator();
-            if (ImGui::MenuItem("Cut", "CTRL+X")) {
+            if (ImGui::MenuItem(ICON_FA_SCISSORS " Cut", "CTRL+X")) {
             }
-            if (ImGui::MenuItem("Copy", "CTRL+C")) {
+            if (ImGui::MenuItem(ICON_FA_COPY " Copy", "CTRL+C")) {
             }
-            if (ImGui::MenuItem("Paste", "CTRL+V")) {
+            if (ImGui::MenuItem(ICON_FA_PASTE " Paste", "CTRL+V")) {
             }
             ImGui::EndMenu();
         }
 
         // Filter menu
-        if (ImGui::BeginMenu("Filter")) {
+        if (ImGui::BeginMenu(ICON_FA_WAND_MAGIC_SPARKLES " Filter")) {
             if (ImGui::MenuItem("Blur")) {
             }
             ImGui::EndMenu();
@@ -114,8 +114,8 @@ static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
     ImGui::Button(ICON_FA_PAINTBRUSH);
-    ImGui::Button("Line");
-    ImGui::Button("Circle");
+    ImGui::Button(ICON_FA_BUCKET);
+    ImGui::Button(ICON_FA_PEN_NIB);
     ImGui::End();
 
 }

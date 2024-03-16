@@ -8,21 +8,24 @@ Current goals:
         [ ][J] Draw line
 [X][D] Make menu bar
     [X][D] Make menu (GUI)
-    [ ][D] Make options (GUI)
+    [X][D] Make options (GUI)
         [ ][D] Implement Options
             [ ] Image Save
             [ ] Image Save As
             [ ] Image Open
                 [ ] Open Recent
             [ ] Blur
+    [X] Add custom icons
 [X][D] Make ToolBox
     [ ][D] Make tools (GUI)
         [ ] Brush
+        [ ] Bucket
         [ ] Circle
         [ ] Line
         [ ] Color picker
     [ ][J] Implement Tools
         [ ] Brush
+        [ ] Bucket
         [ ] Circle
         [ ] Line
         [ ] Color picker
