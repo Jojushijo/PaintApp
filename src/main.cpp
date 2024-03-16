@@ -5,6 +5,8 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "sbl_image.h"
+#include "icons.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -12,8 +14,6 @@
 #include <SDL_opengl.h>
 #endif
 #include <iostream>
-
-#include <SDL_image.h>
 
 bool LoadTextureFromFile(const char* filename, SDL_Texture** texture_ptr, int& width, int& height, SDL_Renderer* renderer) {
     SDL_Surface* surface = IMG_Load(filename);
@@ -113,10 +113,11 @@ static void DisplayMainMenuBar() {
 static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(200, 400), ImVec2(200, 400)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
-    ImGui::Button("Paint");
+    ImGui::Button(ICON_FA_PAINTBRUSH);
     ImGui::Button("Line");
     ImGui::Button("Circle");
     ImGui::End();
+
 }
 
 // Main code
@@ -168,6 +169,20 @@ int main(int, char**) {
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
 
+    // Custom font/icons
+    io.Fonts->AddFontDefault();
+    float baseFontSize = 13.0f; // 13.0f is the size of the default font. Change to the font size you use.
+    float iconFontSize = baseFontSize * 2.0f / 3.0f; // FontAwesome fonts need to have their sizes reduced by 2.0f/3.0f in order to align correctly
+
+    // merge in icons from Font Awesome
+    static const ImWchar icons_ranges[] = { ICON_MIN_FA, ICON_MAX_16_FA, 0 };
+    ImFontConfig icons_config;
+    icons_config.MergeMode = true;
+    icons_config.PixelSnapH = true;
+    icons_config.GlyphMinAdvanceX = iconFontSize;
+    // use "fa-regular-400.ttf" if you want regular instead of solid
+    io.Fonts->AddFontFromFileTTF("../icons/fa-solid-900.ttf", iconFontSize, &icons_config, icons_ranges);
+
     //Custom Theme
     Default::StyleColorsDefault();
 
@@ -192,8 +207,9 @@ int main(int, char**) {
         ImGui_ImplSDL2_NewFrame();
 
         ImGui::NewFrame();
-        DisplayToolbox(renderer);
         DisplayMainMenuBar();
+        DisplayToolbox(renderer);
+
 
         // Rendering
         ImGui::Render();
