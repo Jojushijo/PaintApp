@@ -1,6 +1,6 @@
 #pragma once
 
-/// Pick one, or have one defined already.
+/// Dark and light theme changing is done here (temp).
 #if !defined(DEFAULT_USE_LIGHT_THEME) && !defined(DEFAULT_USE_DARK_THEME)
 #define DEFAULT_USE_DARK_THEME
 // #define DEFAULT_USE_DARK_THEME

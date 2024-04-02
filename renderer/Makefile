@@ -14,9 +14,9 @@
 #CXX = g++
 #CXX = clang++
 
-EXE = paint
+EXE = dot
 IMGUI_DIR = ../
-SOURCES = triangle.cpp
+SOURCES = dot.cpp
 SOURCES += $(IMGUI_DIR)/imgui/imgui.cpp $(IMGUI_DIR)/imgui/imgui_demo.cpp $(IMGUI_DIR)/imgui/imgui_draw.cpp $(IMGUI_DIR)/imgui/imgui_tables.cpp $(IMGUI_DIR)/imgui/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_opengl3.cpp
 SOURCES += $(IMGUI_DIR)/themes/default_theme.cpp
