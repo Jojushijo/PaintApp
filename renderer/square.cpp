@@ -92,15 +92,14 @@ int main(int, char**) {
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         if (drawSquare) {
-            // Code to draw a square
-            // Define vertices of the square
+            float halfSize = size / 2.0f;
             float vertices[] = {
                 -0.5f, -0.5f, // Bottom-left vertex
                 0.5f, -0.5f,  // Bottom-right vertex
                 0.5f, 0.5f,   // Top-right vertex
                 -0.5f, 0.5f   // Top-left vertex
             };
-
+        }
             // Create and bind a vertex buffer object (VBO)
             GLuint VBO;
             glGenBuffers(1, &VBO);
@@ -108,13 +107,13 @@ int main(int, char**) {
             glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
             // Create and compile the vertex shader
-            const char* vertexShaderSource = R"(
+            const char* vertexShaderSource = R(
                 #version 130
                 in vec2 position;
                 void main() {
                     gl_Position = vec4(position.x, position.y, 0.0, 1.0);
                 }
-            )";
+            );
             GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
             glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
             glCompileShader(vertexShader);
@@ -124,4 +123,7 @@ int main(int, char**) {
                 #version 130
                 out vec4 fragColor;
                 void main() {
-                    fragColor = vec4(0.0, 0.
+                    fragColor = vec4(0.0, 0.0, 0.0, 1.0):
+                    }
+                )"
+        
