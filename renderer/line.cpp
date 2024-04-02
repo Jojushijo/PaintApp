@@ -105,7 +105,7 @@ int main(int, char**) {
             // Reset flag
             drawLine = false;
         }
-
+        
         // Update and Render additional Platform Windows
         if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
             // Your existing code here...

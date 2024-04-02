@@ -7,7 +7,6 @@
 #include <SDL_image.h>
 #include "sbl_image.h"
 #include "icons.h"
-#include "dot.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -133,11 +132,6 @@ static void DisplayToolbox(SDL_Renderer* renderer) {
     ImGui::SameLine();
     ImGui::Button(ICON_FA_COMPASS_DRAFTING); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
     ImGui::SetItemTooltip("Draw Ellipse | CTRL+E");
-    
-    // Square tool
-    ImGui::SameLine();
-    ImGui::Button(ICON_FA_PEN_NIB);
-    ImGui::SetItemTooltip("Draw Square | CTRL+Q");
 
     ImGui::SeparatorText("Colors");
 
@@ -262,7 +256,6 @@ int main(int, char**) {
         }
 
         SDL_GL_SwapWindow(window);
-
     }
 
     // Cleanup
