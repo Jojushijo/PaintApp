@@ -97,8 +97,8 @@ void Render() {
     ImGui_ImplSDL2_NewFrame();
 
     ImGui::NewFrame();
-    // DisplayMainMenuBar();
-    // DisplayToolbox(renderer);
+    DisplayMainMenuBar();
+    DisplayToolbox(renderer);
 
     // Rendering
     ImGui::Render();
