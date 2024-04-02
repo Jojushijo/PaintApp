@@ -262,6 +262,7 @@ int main(int, char**) {
         }
 
         SDL_GL_SwapWindow(window);
+
     }
 
     // Cleanup
