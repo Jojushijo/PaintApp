@@ -1,3 +1,4 @@
+#include "array"
 #include "default_theme.h"
 #include "imgui.h"
 #include "imgui_impl_sdl2.h"
@@ -5,6 +6,8 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
+#include "sbl_image.h"
+#include "icons.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -13,15 +16,40 @@
 #endif
 #include <iostream>
 
-bool drawSquare = false;
+class Canvas{
+  private:
+  int w;
+  int h;
+  std::array<int, 3>bodycolor;
+  SDL_Surface* surface;
 
+  public: 
+  Canvas(int w, int h, std::array<int, 3>& bodycolor) :w(w), h(h), bodycolor(bodycolor){
+
+    std::array<int, 3> getColor() const{
+        return bodycolor;
+    }
+     
+  }
+
+  
+};
+
+static void DrawCanvas(SDL_Renderer* renderer){ 
+    //Draw Shape
+    SDL_Rect Canvas = {50, 50, 200, 200};
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderFillRect(renderer, &Canvas); 
+    SDL_RenderPresent(renderer);
+}
+
+// Main code
 int main(int, char**) {
     // Setup SDL
     if (SDL_Init(SDL_INIT_VIDEO | SDL_INIT_TIMER | SDL_INIT_GAMECONTROLLER) != 0) {
         printf("Error: %s\n", SDL_GetError());
         return -1;
     }
-
 
     // GL 3.0 + GLSL 130
     const char* glsl_version = "#version 130";
@@ -36,6 +64,10 @@ int main(int, char**) {
     SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 8);
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_OPENGL | SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
     SDL_Window* window = SDL_CreateWindow("Sumi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_Renderer* renderer = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED | SDL_RENDERER_PRESENTVSYNC);
+    
+    
+
     if (window == nullptr) {
         printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
         return -1;
@@ -44,6 +76,11 @@ int main(int, char**) {
     SDL_GLContext gl_context = SDL_GL_CreateContext(window);
     SDL_GL_MakeCurrent(window, gl_context);
     SDL_GL_SetSwapInterval(1); // Enable vsync
+
+    // Set window icon
+    SDL_Surface* iconSurface = IMG_Load("../icons/icon.png");
+    SDL_SetWindowIcon(window, iconSurface);
+    SDL_FreeSurface(iconSurface);
 
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
@@ -56,6 +93,8 @@ int main(int, char**) {
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;   // Enable Multi-Viewport / Platform Windows
     // io.ConfigViewportsNoAutoMerge = true;
     io.ConfigViewportsNoTaskBarIcon = true;
+
+   
 
     // Setup Platform/Renderer backends
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
@@ -76,56 +115,40 @@ int main(int, char**) {
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
-        ImGui::NewFrame();
 
-        // Add a button to draw a square
-        if (ImGui::Button("Draw Square")) {
-            drawSquare = true;
-        }
+        ImGui::NewFrame();
+        
 
         // Rendering
         ImGui::Render();
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGuiStyle& style = ImGui::GetStyle();
-        ImVec4 clearColor = style.Colors[ImGuiCol_FrameBg];
+        ImVec4 clearColor = ImGui::ColorConvertU32ToFloat4(Default::GRAY100);
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-
-        if (drawSquare) {
-            float halfSize = size / 2.0f;
-            float vertices[] = {
-                -0.5f, -0.5f, // Bottom-left vertex
-                0.5f, -0.5f,  // Bottom-right vertex
-                0.5f, 0.5f,   // Top-right vertex
-                -0.5f, 0.5f   // Top-left vertex
-            };
+        DrawCanvas(renderer);
+        
+        // Update and Render additional Platform Windows
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+            SDL_Window* backup_current_window = SDL_GL_GetCurrentWindow();
+            SDL_GLContext backup_current_context = SDL_GL_GetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
-            // Create and bind a vertex buffer object (VBO)
-            GLuint VBO;
-            glGenBuffers(1, &VBO);
-            glBindBuffer(GL_ARRAY_BUFFER, VBO);
-            glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
-
-            // Create and compile the vertex shader
-            const char* vertexShaderSource = R(
-                #version 130
-                in vec2 position;
-                void main() {
-                    gl_Position = vec4(position.x, position.y, 0.0, 1.0);
-                }
-            );
-            GLuint vertexShader = glCreateShader(GL_VERTEX_SHADER);
-            glShaderSource(vertexShader, 1, &vertexShaderSource, NULL);
-            glCompileShader(vertexShader);
-
-            // Create and compile the fragment shader
-            const char* fragmentShaderSource = R"(
-                #version 130
-                out vec4 fragColor;
-                void main() {
-                    fragColor = vec4(0.0, 0.0, 0.0, 1.0):
-                    }
-                )"
+         
+        SDL_GL_SwapWindow(window);
     }
+
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplSDL2_Shutdown();
+    ImGui::DestroyContext();
+
+    SDL_GL_DeleteContext(gl_context);
+    SDL_DestroyWindow(window);
+    SDL_Quit();
+
+    return 0;
 }
