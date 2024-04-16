@@ -43,6 +43,9 @@ static void DrawCanvas(SDL_Renderer* renderer){
     SDL_RenderPresent(renderer);
 }
 
+
+
+
 // Main code
 int main(int, char**) {
     // Setup SDL
