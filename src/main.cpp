@@ -275,16 +275,20 @@ int main(int, char**) {
 
         DisplayMainMenuBar();
         DisplayToolbox(renderer);
-        ImGui::Image((ImTextureID)texture, ImVec2(300, 200));
-
 
         // Rendering
         ImGui::Render();
+        // Renders behind IMGUI
+        SDL_Rect drect{ 100, 100, 100, 100 };
+        drect.x += 1000;
+        SDL_RenderCopy(renderer, texture, NULL, &drect);
+
         glViewport(0, 0, (int)io.DisplaySize.x, (int)io.DisplaySize.y);
         ImGuiStyle& style = ImGui::GetStyle();
         ImVec4 clearColor = ImGui::ColorConvertU32ToFloat4(Default::GRAY100);
         glClearColor(clearColor.x, clearColor.y, clearColor.z, clearColor.w);
         glClear(GL_COLOR_BUFFER_BIT);
+
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         style.WindowRounding = 6.0f;
@@ -300,7 +304,8 @@ int main(int, char**) {
             SDL_GL_MakeCurrent(backup_current_window, backup_current_context);
         }
 
-        SDL_GL_SwapWindow(window);
+        // SDL_GL_SwapWindow(window);
+        SDL_RenderPresent(renderer);
     }
 
     // Cleanup
