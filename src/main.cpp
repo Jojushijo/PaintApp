@@ -7,6 +7,7 @@
 #include <SDL_image.h>
 #include "sbl_image.h"
 #include "icons.h"
+#include "canvas.h"
 
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
@@ -14,6 +15,9 @@
 #include <SDL_opengl.h>
 #endif
 #include <iostream>
+
+
+
 
 bool LoadTextureFromFile(const char* filename, SDL_Texture** texture_ptr, int& width, int& height, SDL_Renderer* renderer) {
     SDL_Surface* surface = IMG_Load(filename);
@@ -179,6 +183,16 @@ int main(int, char**) {
     SDL_SetWindowIcon(window, iconSurface);
     SDL_FreeSurface(iconSurface);
 
+    // Create a render target for the game itself
+    SDL_Texture* texture = SDL_CreateTexture(renderer,
+        SDL_PIXELFORMAT_RGBA8888, SDL_TEXTUREACCESS_TARGET,
+        300, 200);
+
+    SDL_SetRenderTarget(renderer, texture);
+    SDL_SetRenderDrawColor(renderer, 255, 0, 0, 255);
+    SDL_RenderClear(renderer);
+    SDL_SetRenderTarget(renderer, NULL);
+
     // Setup Dear ImGui context
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -212,25 +226,56 @@ int main(int, char**) {
     ImGui_ImplSDL2_InitForOpenGL(window, gl_context);
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    Canvas easel(renderer);
+
     bool done = false;
 
     while (!done) {
+
+        // Handle user inputs and events
         SDL_Event event;
+
         while (SDL_PollEvent(&event)) {
             ImGui_ImplSDL2_ProcessEvent(&event);
-            if (event.type == SDL_QUIT)
+
+            switch (event.type) {
+            case SDL_QUIT:
                 done = true;
+
+            case SDL_MOUSEBUTTONDOWN:
+                switch (event.button.button) {
+                case SDL_BUTTON_LEFT:
+                    int x = event.motion.x;
+                    int y = event.motion.y;
+                    break;
+                }
+                break;
+
+            case SDL_MOUSEBUTTONUP:
+                switch (event.button.button) {
+                case SDL_BUTTON_LEFT:
+                    //     drawing = false;
+                    // easel.draw();
+                    break;
+                }
+                break;
+            }
+
+            // Checks that window is open and when its closed
             if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
                 done = true;
         }
+
 
         // Start the Dear ImGui frame
         ImGui_ImplOpenGL3_NewFrame();
         ImGui_ImplSDL2_NewFrame();
 
         ImGui::NewFrame();
+
         DisplayMainMenuBar();
         DisplayToolbox(renderer);
+        ImGui::Image((ImTextureID)texture, ImVec2(300, 200));
 
 
         // Rendering

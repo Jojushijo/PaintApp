@@ -64,13 +64,13 @@ endif
 # 
 # LIBS += -lgdi32 -lopengl32 -lSDL2main -lSDL2 -lSDL2_image
 
-ifeq ($(OS), Windows_NT)
-    ECHO_MESSAGE = "MinGW"
-    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
-	
-    CXXFLAGS += `pkg-config --cflags sdl2`
-    CFLAGS = $(CXXFLAGS)
-endif
+# ifeq ($(OS), Windows_NT)
+#     ECHO_MESSAGE = "MinGW"
+#     LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
+# 	
+#     CXXFLAGS += `pkg-config --cflags sdl2`
+#     CFLAGS = $(CXXFLAGS)
+# endif
 
 ##---------------------------------------------------------------------
 ## BUILD RULES
