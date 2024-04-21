@@ -18,27 +18,16 @@ EXE = demo
 IMGUI_DIR = ../
 SOURCES = demo.cpp
 SOURCES += $(IMGUI_DIR)/imgui/imgui.cpp $(IMGUI_DIR)/imgui/imgui_demo.cpp $(IMGUI_DIR)/imgui/imgui_draw.cpp $(IMGUI_DIR)/imgui/imgui_tables.cpp $(IMGUI_DIR)/imgui/imgui_widgets.cpp
-SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_opengl3.cpp
+SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_sdlrenderer2.cpp
 SOURCES += $(IMGUI_DIR)/themes/default_theme.cpp
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
 
-CXXFLAGS = -std=c++11 -I$(IMGUI_DIR)/imgui -I$(IMGUI_DIR)/backend -I$(IMGUI_DIR)/themes
+CXXFLAGS = -std=c++11 -I$(IMGUI_DIR)/imgui -I$(IMGUI_DIR)/backend -I$(IMGUI_DIR)/themes -I$(IMGUI_DIR)/icons
 CXXFLAGS += -g -Wall -Wformat
 SOURCES += 
 LIBS =
-
-##---------------------------------------------------------------------
-## OPENGL ES
-##---------------------------------------------------------------------
-
-## This assumes a GL ES library available in the system, e.g. libGLESv2.so
-# CXXFLAGS += -DIMGUI_IMPL_OPENGL_ES2
-# LINUX_GL_LIBS = -lGLESv2
-## If you're on a Raspberry Pi and want to use the legacy drivers,
-## use the following instead:
-# LINUX_GL_LIBS = -L/opt/vc/lib -lbrcmGLESv2
 
 ##---------------------------------------------------------------------
 ## BUILD FLAGS PER PLATFORM
@@ -46,7 +35,7 @@ LIBS =
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs` -lSDL2_image
+	LIBS += -lGL -ldl `sdl2-config --libs`
 
 	CXXFLAGS += `sdl2-config --cflags`
 	CFLAGS = $(CXXFLAGS)
@@ -62,15 +51,13 @@ endif
 # 	CFLAGS = $(CXXFLAGS)
 # endif
 # 
-# LIBS += -lgdi32 -lopengl32 -lSDL2main -lSDL2 -lSDL2_image
-
-ifeq ($(OS), Windows_NT)
-    ECHO_MESSAGE = "MinGW"
-    LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
-	
-    CXXFLAGS += `pkg-config --cflags sdl2`
-    CFLAGS = $(CXXFLAGS)
-endif
+# ifeq ($(OS), Windows_NT)
+# 	ECHO_MESSAGE = "MinGW"
+# 	LIBS += -lgdi32 -lopengl32 -limm32 `pkg-config --static --libs sdl2`
+# 
+# 	CXXFLAGS += `pkg-config --cflags sdl2`
+# 	CFLAGS = $(CXXFLAGS)
+# endif
 
 ##---------------------------------------------------------------------
 ## BUILD RULES
