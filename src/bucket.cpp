@@ -3,10 +3,10 @@
 
 class Bucket : public Tool {
 public:
-    Bucket(Canvas& canvas, std::array<int, 3> color, int x = 0, int y = 0) : Tool(canvas, color, x, y) {};
+    Bucket(Canvas& canvas) : Tool(canvas) {};
 
-    void set_start(int x, int y, std::array<int, 3> color) override {
-        return;
+    void set_start(int x, int y, std::array<float, 3>& color) override {
+        std::cout << color[0] << " " << color[1] << " " << color[2] << std::endl;
     }
 
     void flood_fill() {

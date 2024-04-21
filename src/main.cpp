@@ -5,9 +5,10 @@
 #include <stdio.h>
 #include <SDL.h>
 #include <SDL_image.h>
-#include "sbl_image.h"
 #include "icons.h"
 #include "canvas.h"
+#include "tool.h"
+#include "brush.h"
 
 // Define constants for window resolution
 const int WINDOW_WIDTH = 1280;
@@ -110,12 +111,14 @@ static void DisplayMainMenuBar() {
 }
 
 // ToolBox
-static void DisplayToolbox(SDL_Renderer* renderer) {
+static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<float, 3>& color) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
 
     // Draw Tool
-    ImGui::Button(ICON_FA_PENCIL);
+    if (ImGui::Button(ICON_FA_PENCIL)) {
+        current_tool = new Brush(canvas);
+    }
     ImGui::SetItemTooltip("Paint | CTRL+D");
 
     // Fill Tool
@@ -135,9 +138,9 @@ static void DisplayToolbox(SDL_Renderer* renderer) {
 
     ImGui::SeparatorText("Colors");
 
-    static float col1[3] = { 0.f, 0.0f, 0.0f };
+    //static float col1[3] = { 0.f, 0.0f, 0.0f };
     static float col2[3] = { 1.0f, 1.0f, 1.00f };
-    ImGui::ColorEdit3("Primary", (float*)&col1);
+    ImGui::ColorEdit3("Primary", (float*)&color);
     ImGui::ColorEdit3("Secondary", (float*)&col2);
     ImGui::End();
 }
@@ -150,10 +153,6 @@ int main(int, char**) {
         return -1;
     }
 
-    // From 2.0.18: Enable native IME.
-#ifdef SDL_HINT_IME_SHOW_UI
-    SDL_SetHint(SDL_HINT_IME_SHOW_UI, "1");
-#endif
 
     // Create window with SDL_Renderer graphics context
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
@@ -219,7 +218,11 @@ int main(int, char**) {
     SDL_Texture* tex_background = SDL_CreateTextureFromSurface(renderer, surf);
     SDL_FreeSurface(surf);
 
-    Canvas easel(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 720, 480);
+    // Canvas and tools
+    Canvas main_canvas(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 720, 480);
+    std::array<float, 3> color = { 0,0,0 };
+    Tool* current_tool;
+    current_tool = new Brush(main_canvas);
 
     bool done = false;
 
@@ -240,8 +243,9 @@ int main(int, char**) {
 
                     // Drawing
                 case SDL_BUTTON_LEFT:
-                    int x = event.motion.x;
-                    int y = event.motion.y;
+                    // int x = event.motion.x;
+                    // int y = event.motion.y;
+                    current_tool->set_start(event.motion.x, event.motion.y, color);
                     break;
                 }
                 break;
@@ -267,7 +271,7 @@ int main(int, char**) {
 
         // Dragging the screen
         if (middleMouseButton) {
-            easel.pan(x_off, y_off);
+            main_canvas.pan(x_off, y_off);
         }
 
 
@@ -277,7 +281,7 @@ int main(int, char**) {
         ImGui::NewFrame();
 
         DisplayMainMenuBar();
-        DisplayToolbox(renderer);
+        DisplayToolbox(renderer, current_tool, main_canvas, color);
 
         // Rendering
         ImGui::Render();
@@ -300,7 +304,7 @@ int main(int, char**) {
         SDL_RenderCopy(renderer, tex_background, NULL, &drect);
 
         // Draw the canvas before imgui overlay, but on top of background
-        easel.draw_self();
+        main_canvas.draw_self();
 
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);

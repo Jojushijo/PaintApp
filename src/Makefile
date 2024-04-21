@@ -20,7 +20,7 @@ SOURCES = src/main
 SOURCES += $(IMGUI_DIR)/imgui/imgui.cpp $(IMGUI_DIR)/imgui/imgui_demo.cpp $(IMGUI_DIR)/imgui/imgui_draw.cpp $(IMGUI_DIR)/imgui/imgui_tables.cpp $(IMGUI_DIR)/imgui/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_sdlrenderer2.cpp
 SOURCES += $(IMGUI_DIR)/themes/default_theme.cpp
-SOURCES += $(IMGUI_DIR)/src/tool.cpp $(IMGUI_DIR)/src/bucket.cpp $(IMGUI_DIR)/src/canvas.cpp
+SOURCES += $(IMGUI_DIR)/src/tool.cpp $(IMGUI_DIR)/src/bucket.cpp $(IMGUI_DIR)/src/canvas.cpp $(IMGUI_DIR)/src/brush.cpp
 
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
@@ -37,7 +37,7 @@ LIBS =
 
 ifeq ($(UNAME_S), Linux) #LINUX
 	ECHO_MESSAGE = "Linux"
-	LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs` -lSDL2_image
+	LIBS += $(LINUX_GL_LIBS) -ldl `sdl2-config --libs` -lSDL2_image -lSDL2 -lSDL2_gfx
 
 	CXXFLAGS += `sdl2-config --cflags`
 	CFLAGS = $(CXXFLAGS)

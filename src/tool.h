@@ -10,13 +10,12 @@
 // Dot tool
 class Tool {
 public:
-    Tool(Canvas& canvas, std::array<int, 3> color, int x = 0, int y = 0);
-    virtual void set_start(int x, int y, std::array<int, 3> color);
+    Tool(Canvas& canvas, int x = 0, int y = 0);
+    virtual void set_start(int x, int y, std::array<float, 3>& color);
     virtual void hold(int mouse_x, int mouse_y);
 
 protected:
     int x, y;
-    std::array<int, 3> color;
     Canvas& canvas;
 };
 
