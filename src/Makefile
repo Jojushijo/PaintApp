@@ -16,10 +16,12 @@
 
 EXE = paint
 IMGUI_DIR = ../
-SOURCES = main.cpp
+SOURCES = src/main
 SOURCES += $(IMGUI_DIR)/imgui/imgui.cpp $(IMGUI_DIR)/imgui/imgui_demo.cpp $(IMGUI_DIR)/imgui/imgui_draw.cpp $(IMGUI_DIR)/imgui/imgui_tables.cpp $(IMGUI_DIR)/imgui/imgui_widgets.cpp
 SOURCES += $(IMGUI_DIR)/backend/imgui_impl_sdl2.cpp $(IMGUI_DIR)/backend/imgui_impl_sdlrenderer2.cpp
 SOURCES += $(IMGUI_DIR)/themes/default_theme.cpp
+SOURCES += $(IMGUI_DIR)/src/tool.cpp $(IMGUI_DIR)/src/bucket.cpp $(IMGUI_DIR)/src/canvas.cpp
+
 OBJS = $(addsuffix .o, $(basename $(notdir $(SOURCES))))
 UNAME_S := $(shell uname -s)
 LINUX_GL_LIBS = -lGL
@@ -73,6 +75,9 @@ endif
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 %.o:$(IMGUI_DIR)/themes/%.cpp
+	$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+%.o:$(IMGUI_DIR)/src/%.cpp
 	$(CXX) $(CXXFLAGS) -c -o $@ $<
 
 all: $(EXE)

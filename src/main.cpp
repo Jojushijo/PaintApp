@@ -13,14 +13,7 @@
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 
-#if defined(IMGUI_IMPL_OPENGL_ES2)
-#include <SDL_opengles2.h>
-#else
-#include <SDL_opengl.h>
-#endif
 #include <iostream>
-
-
 
 bool LoadTextureFromFile(const char* filename, SDL_Texture** texture_ptr, int& width, int& height, SDL_Renderer* renderer) {
     SDL_Surface* surface = IMG_Load(filename);
@@ -274,7 +267,7 @@ int main(int, char**) {
 
         // Dragging the screen
         if (middleMouseButton) {
-            easel.move(x_off, y_off);
+            easel.pan(x_off, y_off);
         }
 
 
