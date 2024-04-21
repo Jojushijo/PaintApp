@@ -12,7 +12,7 @@ class Tool {
 public:
     Tool(Canvas& canvas, int x = 0, int y = 0);
     virtual void set_start(int x, int y, std::array<float, 3>& color);
-    virtual void hold(int mouse_x, int mouse_y);
+    virtual void hold(int x, int y, std::array<float, 3>& color);
 
 protected:
     int x, y;

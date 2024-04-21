@@ -6,7 +6,13 @@ Brush::Brush(Canvas& canvas) : Tool(canvas) {}
 
 // Implementation of set_start function
 void Brush::set_start(int x, int y, std::array<float, 3>& color) {
-    int radius = 5;
+    this->x = x;
+    this->y = y;
+
+    draw_brush(x, y, color, 5);
+}
+
+void Brush::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
     int u = x - canvas.x;
     int v = y - canvas.y;
 
@@ -25,7 +31,6 @@ void Brush::set_start(int x, int y, std::array<float, 3>& color) {
                     // Ensure the pixel coordinates are within the surface bounds
                     if (i >= 0 && i < canvas.surface->w && j >= 0 && j < canvas.surface->h) {
                         // Calculate the pixel offset
-// Calculate the pixel offset
                         int index = j * canvas.surface->pitch + i * canvas.surface->format->BytesPerPixel;
 
                         // Get a pointer to the pixel
@@ -46,10 +51,10 @@ void Brush::set_start(int x, int y, std::array<float, 3>& color) {
     }
 }
 
-void Brush::draw_brush() {
-
-}
-
 // Implementation of hold function
-void Brush::hold(int mouse_x, int mouse_y) {
+void Brush::hold(int x, int y, std::array<float, 3>& color) {
+    draw_brush(this->x, this->y, color, 5);
+
+    this->x = x;
+    this->y = y;
 }

@@ -111,7 +111,7 @@ static void DisplayMainMenuBar() {
 }
 
 // ToolBox
-static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<float, 3>& color) {
+static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<float, 3>& main_color, std::array<float, 3>& alt_color) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
     ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
 
@@ -138,10 +138,8 @@ static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& 
 
     ImGui::SeparatorText("Colors");
 
-    //static float col1[3] = { 0.f, 0.0f, 0.0f };
-    static float col2[3] = { 1.0f, 1.0f, 1.00f };
-    ImGui::ColorEdit3("Primary", (float*)&color);
-    ImGui::ColorEdit3("Secondary", (float*)&col2);
+    ImGui::ColorEdit3("Primary", (float*)&main_color);
+    ImGui::ColorEdit3("Secondary", (float*)&alt_color);
     ImGui::End();
 }
 
@@ -220,9 +218,11 @@ int main(int, char**) {
 
     // Canvas and tools
     Canvas main_canvas(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 720, 480);
-    std::array<float, 3> color = { 0,0,0 };
     Tool* current_tool;
     current_tool = new Brush(main_canvas);
+
+    std::array<float, 3> main_color = { 0,0,0 };
+    std::array<float, 3> alt_color = { 0,0,0 };
 
     bool done = false;
 
@@ -240,12 +240,13 @@ int main(int, char**) {
 
             case SDL_MOUSEBUTTONDOWN:
                 switch (event.button.button) {
-
-                    // Drawing
+                    // Drawing with primary color
                 case SDL_BUTTON_LEFT:
-                    // int x = event.motion.x;
-                    // int y = event.motion.y;
-                    current_tool->set_start(event.motion.x, event.motion.y, color);
+                    current_tool->set_start(event.motion.x, event.motion.y, main_color);
+                    break;
+
+                case SDL_BUTTON_RIGHT:
+                    current_tool->set_start(event.motion.x, event.motion.y, alt_color);
                     break;
                 }
                 break;
@@ -266,11 +267,22 @@ int main(int, char**) {
 
         // Check if the left mouse button is held down
         int x_off, y_off;
-        Uint32 mouseState = SDL_GetRelativeMouseState(&x_off, &y_off);
-        bool middleMouseButton = mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+        int mouse_x, mouse_y;
+        Uint32 mouseRelativeState = SDL_GetRelativeMouseState(&x_off, &y_off);
+        Uint32 mouseState = SDL_GetMouseState(&mouse_x, &mouse_y);
+
+        // Holding draw with main color
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+            current_tool->hold(mouse_x, mouse_y, main_color);
+        }
+
+        // Holding draw with alt color
+        if (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+            current_tool->hold(mouse_x, mouse_y, alt_color);
+        }
 
         // Dragging the screen
-        if (middleMouseButton) {
+        if (mouseRelativeState & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
             main_canvas.pan(x_off, y_off);
         }
 
@@ -281,7 +293,7 @@ int main(int, char**) {
         ImGui::NewFrame();
 
         DisplayMainMenuBar();
-        DisplayToolbox(renderer, current_tool, main_canvas, color);
+        DisplayToolbox(renderer, current_tool, main_canvas, main_color, alt_color);
 
         // Rendering
         ImGui::Render();

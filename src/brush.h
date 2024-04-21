@@ -9,8 +9,8 @@ public:
     Brush(Canvas& canvas);
 
     void set_start(int x, int y, std::array<float, 3>& color) override;
-    void hold(int mouse_x, int mouse_y) override;
-    void draw_brush();
+    void hold(int x, int y, std::array<float, 3>& color) override;
+    void draw_brush(int x, int y, std::array<float, 3>& color, int radius);
 };
 
 #endif // BRUSH_H

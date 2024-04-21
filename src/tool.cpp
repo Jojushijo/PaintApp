@@ -8,4 +8,4 @@ void Tool::set_start(int x, int y, std::array<float, 3>& color) {
     this->y = y;
 }
 
-void Tool::hold(int mouse_x, int mouse_y) {};
+void Tool::hold(int x, int y, std::array<float, 3>& color) {};
