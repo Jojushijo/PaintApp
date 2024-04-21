@@ -25,7 +25,7 @@ void Canvas::draw_self() {
 
     // Render textures
     SDL_RenderCopy(renderer, tex_canvas, nullptr, &destRect);
-    // SDL_RenderCopy(renderer, tex_buffer, nullptr, &destRect);
+    SDL_RenderCopy(renderer, tex_buffer, nullptr, &destRect);
 
     // Clean up
     SDL_DestroyTexture(tex_canvas);
