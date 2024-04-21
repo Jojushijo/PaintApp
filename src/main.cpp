@@ -9,13 +9,16 @@
 #include "icons.h"
 #include "canvas.h"
 
+// Define constants for window resolution
+const int WINDOW_WIDTH = 1280;
+const int WINDOW_HEIGHT = 720;
+
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <SDL_opengles2.h>
 #else
 #include <SDL_opengl.h>
 #endif
 #include <iostream>
-
 
 
 
@@ -161,7 +164,7 @@ int main(int, char**) {
 
     // Create window with SDL_Renderer graphics context
     SDL_WindowFlags window_flags = (SDL_WindowFlags)(SDL_WINDOW_RESIZABLE | SDL_WINDOW_ALLOW_HIGHDPI);
-    SDL_Window* window = SDL_CreateWindow("Sumi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, 1280, 720, window_flags);
+    SDL_Window* window = SDL_CreateWindow("Sumi", SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, WINDOW_WIDTH, WINDOW_HEIGHT, window_flags);
 
     if (window == nullptr) {
         printf("Error: SDL_CreateWindow(): %s\n", SDL_GetError());
@@ -218,7 +221,12 @@ int main(int, char**) {
     ImGui_ImplSDL2_InitForSDLRenderer(window, renderer);
     ImGui_ImplSDLRenderer2_Init(renderer);
 
-    Canvas easel(renderer);
+    // Import background image
+    SDL_Surface* surf = IMG_Load("../background/default.png");
+    SDL_Texture* tex_background = SDL_CreateTextureFromSurface(renderer, surf);
+    SDL_FreeSurface(surf);
+
+    Canvas easel(renderer, WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2, 720, 480);
 
     bool done = false;
 
@@ -236,6 +244,8 @@ int main(int, char**) {
 
             case SDL_MOUSEBUTTONDOWN:
                 switch (event.button.button) {
+
+                    // Drawing
                 case SDL_BUTTON_LEFT:
                     int x = event.motion.x;
                     int y = event.motion.y;
@@ -247,7 +257,6 @@ int main(int, char**) {
                 switch (event.button.button) {
                 case SDL_BUTTON_LEFT:
                     //     drawing = false;
-                    // easel.draw();
                     break;
                 }
                 break;
@@ -256,6 +265,16 @@ int main(int, char**) {
             // Checks that window is open and when its closed
             if (event.type == SDL_WINDOWEVENT && event.window.event == SDL_WINDOWEVENT_CLOSE && event.window.windowID == SDL_GetWindowID(window))
                 done = true;
+        }
+
+        // Check if the left mouse button is held down
+        int x_off, y_off;
+        Uint32 mouseState = SDL_GetRelativeMouseState(&x_off, &y_off);
+        bool middleMouseButton = mouseState & SDL_BUTTON(SDL_BUTTON_MIDDLE);
+
+        // Dragging the screen
+        if (middleMouseButton) {
+            easel.move(x_off, y_off);
         }
 
 
@@ -280,6 +299,16 @@ int main(int, char**) {
         SDL_RenderSetScale(renderer, io.DisplayFramebufferScale.x, io.DisplayFramebufferScale.y);
         SDL_SetRenderDrawColor(renderer, (Uint8)(clearColor.x * 255), (Uint8)(clearColor.y * 255), (Uint8)(clearColor.z * 255), (Uint8)(clearColor.w * 255));
         SDL_RenderClear(renderer);
+
+        // render the background image
+        SDL_SetRenderTarget(renderer, tex_background);
+        SDL_RenderClear(renderer);
+        SDL_Rect drect{ 0, 0, WINDOW_WIDTH, WINDOW_HEIGHT };
+        SDL_RenderCopy(renderer, tex_background, NULL, &drect);
+
+        // Draw the canvas before imgui overlay, but on top of background
+        easel.draw_self();
+
         ImGui_ImplSDLRenderer2_RenderDrawData(ImGui::GetDrawData());
         SDL_RenderPresent(renderer);
     }
