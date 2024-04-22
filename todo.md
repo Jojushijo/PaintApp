@@ -1,35 +1,35 @@
 Current goals:
 ---------------------------------
-[X][D] Make GUI theme
-[ ][J] Make canvas
-    [ ][J] Basic functionality
-        [ ][J] Draw dot
+[D][D] Make GUI theme
+[D][J] Make canvas
+    [D][J] Basic functionality
+        [D][J] Draw dot
         [ ][J] Draw circle
-        [ ][J] Draw line
-[X][D] Make menu bar
-    [X][D] Make menu (GUI)
-    [X][D] Make options (GUI)
+        [D][J] Draw line
+[D][D] Make menu bar
+    [D][D] Make menu (GUI)
+    [D][D] Make options (GUI)
         [ ][D] Implement Options (Requires canvas)
             [ ] Image Save
             [ ] Image Save As
             [ ] Image Open
                 [ ] Open Recent
             [ ] Blur
-    [X] Add custom icons
-[X][D] Make ToolBox
-    [X][D] Make tools (GUI)
-        [X] Brush
-        [X] Bucket
-        [X] Circle
-        [X] Line
-        [X] Color pickers
-    [X][D] Make tooltips
-    [ ][J] Implement Tools
-        [ ] Brush
+    [D] Add custom icons
+[D][D] Make ToolBox
+    [D][D] Make tools (GUI)
+        [D] Brush
+        [D] Bucket
+        [D] Circle
+        [D] Line
+        [D] Color pickers
+    [D][D] Make tooltips
+    [D][J] Implement Tools
+        [D] Brush
         [ ] Bucket
         [ ] Circle
-        [ ] Line
-        [ ] Color picker
+        [D] Line
+        [D] Color picker
 ---------------------------------
 Stretch goals:
 [ ][ ] Custom themeing

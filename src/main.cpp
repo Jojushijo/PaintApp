@@ -9,11 +9,13 @@
 #include "canvas.h"
 #include "tool.h"
 #include "brush.h"
+#include "line.h"
 
 // Define constants for window resolution
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
 const float zoom_speed = 0.1f;
+std::string tool_box_title = "ToolBox - Brush";
 
 #include <iostream>
 
@@ -114,27 +116,36 @@ static void DisplayMainMenuBar() {
 // ToolBox
 static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<float, 3>& main_color, std::array<float, 3>& alt_color) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
-    ImGui::Begin("Toolbox", NULL, ImGuiWindowFlags_NoResize);
+    ImGui::Begin(tool_box_title.c_str(), NULL, ImGuiWindowFlags_NoResize);
 
     // Draw Tool
     if (ImGui::Button(ICON_FA_PENCIL)) {
         current_tool = new Brush(canvas);
+        tool_box_title = "ToolBox - Brush";
     }
+
     ImGui::SetItemTooltip("Paint | CTRL+D");
 
     // Fill Tool
     ImGui::SameLine();
-    ImGui::Button(ICON_FA_BUCKET);
+    if (ImGui::Button(ICON_FA_BUCKET)) {
+        tool_box_title = "ToolBox - Bucket";
+    };
     ImGui::SetItemTooltip("Fill | CTRL+B");
 
     // Line Tool
     ImGui::SameLine();
-    ImGui::Button(ICON_FA_PEN_NIB);
+    if (ImGui::Button(ICON_FA_PEN_NIB)) {
+        current_tool = new Line(canvas);
+        tool_box_title = "ToolBox - Line";
+    };
     ImGui::SetItemTooltip("Draw Line | CTRL+L");
 
     // Circle Tool
     ImGui::SameLine();
-    ImGui::Button(ICON_FA_COMPASS_DRAFTING); // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
+    if (ImGui::Button(ICON_FA_COMPASS_DRAFTING)) {
+        tool_box_title = "ToolBox - Circle";
+    }; // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
     ImGui::SetItemTooltip("Draw Ellipse | CTRL+E");
 
     ImGui::SeparatorText("Colors");
@@ -258,7 +269,13 @@ int main(int, char**) {
                 case SDL_BUTTON_LEFT:
                     main_canvas.flush();
                     break;
+
+                    // Push all changes in the buffer layer to the main layer
+                case SDL_BUTTON_RIGHT:
+                    main_canvas.flush();
+                    break;
                 }
+
                 break;
 
             case SDL_MOUSEWHEEL:
@@ -280,16 +297,19 @@ int main(int, char**) {
 
         // Holding draw with main color
         if (mouseState & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+            ImGui::SetMouseCursor(-1);
             current_tool->hold(mouse_x, mouse_y, main_color);
         }
 
         // Holding draw with alt color
         if (mouseState & SDL_BUTTON(SDL_BUTTON_RIGHT)) {
+            ImGui::SetMouseCursor(-1);
             current_tool->hold(mouse_x, mouse_y, alt_color);
         }
 
         // Dragging the screen
         if (mouseRelativeState & SDL_BUTTON(SDL_BUTTON_MIDDLE)) {
+            ImGui::SetMouseCursor(2);
             main_canvas.pan(x_off, y_off);
         }
 

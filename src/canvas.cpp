@@ -31,6 +31,8 @@ void Canvas::draw_self() {
 
     // Render textures
     SDL_RenderCopy(renderer, tex_canvas, nullptr, &destRect);
+
+    // Comment me out to see how flushing works
     SDL_RenderCopy(renderer, tex_buffer, nullptr, &destRect);
 
     // Clean up
