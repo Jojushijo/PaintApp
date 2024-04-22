@@ -15,8 +15,8 @@ void Brush::set_start(int x, int y, std::array<float, 3>& color) {
 }
 
 void Brush::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
-    int u = x - canvas.x;
-    int v = y - canvas.y;
+    int u = (x - canvas.zoom_x) / canvas.zoom;
+    int v = (y - canvas.zoom_y) / canvas.zoom;
 
     // Ensure the coordinates are within the canvas bounds
     if (u >= 0 && u < canvas.buffer->w && v >= 0 && v < canvas.buffer->h) {
@@ -43,9 +43,10 @@ void Brush::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
                         Uint8* pixel = reinterpret_cast<Uint8*>(canvas.buffer->pixels) + index;
 
                         // Determine the appropriate color format and set the pixel color
-                        pixel[0] = (1 - lerp_am) * b + lerp_am * pixel[0];
-                        pixel[1] = (1 - lerp_am) * g + lerp_am * pixel[1];
-                        pixel[2] = (1 - lerp_am) * r + lerp_am * pixel[2];
+                        pixel[0] = b;
+                        pixel[1] = g;
+                        pixel[2] = r;
+                        pixel[3] = (1 - lerp_am) * 255 + lerp_am * pixel[3];
                     }
                 }
             }
@@ -55,12 +56,6 @@ void Brush::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
         }
     }
 }
-
-// Implementation of hold function
-// void Brush::draw_line(int x1, int y1, int x2, int y2, std::array<float, 3>& color, int brush_radius) {
-// 
-//     }
-// }
 
 // An implementation of Bresenham's line algorithm https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 void Brush::hold(int x, int y, std::array<float, 3>& color) {
@@ -75,6 +70,7 @@ void Brush::hold(int x, int y, std::array<float, 3>& color) {
     int new_y = y;
 
     while (x != this->x || y != this->y) {
+        // Temp precision error amount, shifting amount is from original implementation and I believe is to avoid the need for floating point comparison
         int e2 = err << 1;
 
         // Making sure we're not going too far below the ideal line

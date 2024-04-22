@@ -9,6 +9,7 @@ class Canvas {
 public:
     SDL_Renderer* renderer;
     int w, h, x, y;
+    int zoom_x, zoom_y;
     float zoom;
     bool drawing;
     SDL_Surface* surface;
@@ -22,6 +23,7 @@ public:
     void pan(int x_off, int y_off);
     void draw_self();
     void flush();
+    void clear_buffer();
 };
 
 #endif // CANVAS_H

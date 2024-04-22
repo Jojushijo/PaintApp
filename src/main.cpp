@@ -13,6 +13,7 @@
 // Define constants for window resolution
 const int WINDOW_WIDTH = 1280;
 const int WINDOW_HEIGHT = 720;
+const float zoom_speed = 0.1f;
 
 #include <iostream>
 
@@ -222,7 +223,7 @@ int main(int, char**) {
     current_tool = new Brush(main_canvas);
 
     std::array<float, 3> main_color = { 0,0,0 };
-    std::array<float, 3> alt_color = { 0,0,0 };
+    std::array<float, 3> alt_color = { 1.0,1.0,1.0 };
 
     bool done = false;
 
@@ -253,10 +254,16 @@ int main(int, char**) {
 
             case SDL_MOUSEBUTTONUP:
                 switch (event.button.button) {
+                    // Push all changes in the buffer layer to the main layer
                 case SDL_BUTTON_LEFT:
-                    //     drawing = false;
+                    main_canvas.flush();
                     break;
                 }
+                break;
+
+            case SDL_MOUSEWHEEL:
+                main_canvas.zoom *= 1 + (event.wheel.y) * zoom_speed;
+                std::cout << main_canvas.zoom << std::endl;
                 break;
             }
 
