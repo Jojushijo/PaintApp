@@ -4,8 +4,8 @@
 #include <SDL2/SDL.h> // Include SDL headers if needed
 
 
-Canvas::Canvas(SDL_Renderer* renderer, int cx, int cy, int w, int h, float zoom, bool drawing, std::array<float, 3> bodycolor)
-    : renderer(renderer), x(cx - w / 2), y(cy - h / 2), w(w), h(h), zoom(zoom), drawing(drawing), bodycolor(bodycolor), surface(SDL_CreateRGBSurface(0, w, h, 24, 0xFF0000, 0x00FF00, 0x0000FF, 0)), buffer(SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, SDL_PIXELFORMAT_RGBA32)) {
+Canvas::Canvas(SDL_Renderer* renderer, int cx, int cy, int w, int h, float zoom, bool drawing, std::array<Uint8, 3> bodycolor)
+    : renderer(renderer), x(cx - w / 2), y(cy - h / 2), w(w), h(h), zoom(zoom), drawing(drawing), bodycolor(bodycolor), surface(SDL_CreateRGBSurfaceWithFormat(0, w, h, 24, SDL_PIXELFORMAT_RGB24)), buffer(SDL_CreateRGBSurfaceWithFormat(0, w, h, 32, SDL_PIXELFORMAT_RGBA32)) {
     SDL_FillRect(surface, nullptr, SDL_MapRGB(surface->format, bodycolor[0], bodycolor[1], bodycolor[2]));
     SDL_FillRect(buffer, nullptr, SDL_MapRGBA(buffer->format, bodycolor[0], bodycolor[1], bodycolor[2], 0));
 }

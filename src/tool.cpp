@@ -3,12 +3,12 @@
 
 Tool::Tool(Canvas& canvas, int x, int y) : canvas(canvas), x(x), y(y) {};
 
-void Tool::set_start(int x, int y, std::array<float, 3>& color) {
+void Tool::set_start(int x, int y, std::array<Uint8, 3>& color) {
     this->x = x;
     this->y = y;
 }
 
-void Tool::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
+void Tool::draw_brush(int x, int y, std::array<Uint8, 3>& color, int radius) {
     int u = (x - canvas.zoom_x) / canvas.zoom;
     int v = (y - canvas.zoom_y) / canvas.zoom;
 
@@ -16,11 +16,6 @@ void Tool::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
     if (u >= 0 && u < canvas.buffer->w && v >= 0 && v < canvas.buffer->h) {
         // Lock the surface to directly access its pixels
         if (SDL_LockSurface(canvas.buffer) == 0) {
-            // Get the color components
-            Uint8 r = static_cast<Uint8>(color[0] * 255);
-            Uint8 g = static_cast<Uint8>(color[1] * 255);
-            Uint8 b = static_cast<Uint8>(color[2] * 255);
-
             // Draw a square (for example, a 10x10 square)
             for (int i = u - radius; i <= u + radius; ++i) {
                 for (int j = v - radius; j <= v + radius; ++j) {
@@ -37,9 +32,9 @@ void Tool::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
                         Uint8* pixel = reinterpret_cast<Uint8*>(canvas.buffer->pixels) + index;
 
                         // Determine the appropriate color format and set the pixel color
-                        pixel[0] = r;
-                        pixel[1] = g;
-                        pixel[2] = b;
+                        pixel[0] = color[0];
+                        pixel[1] = color[1];
+                        pixel[2] = color[2];
                         pixel[3] = (1 - lerp_am) * 255 + lerp_am * pixel[3];
                     }
                 }
@@ -52,7 +47,8 @@ void Tool::draw_brush(int x, int y, std::array<float, 3>& color, int radius) {
 }
 
 // An implementation of Bresenham's line algorithm https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
-void Tool::draw_line(int x1, int y1, int x2, int y2, std::array<float, 3>& color, int radius) {
+// Note I should change the step size to match with the zoom, for extreme zoom cases
+void Tool::draw_line(int x1, int y1, int x2, int y2, std::array<Uint8, 3>& color, int radius) {
     int dx = abs(x2 - x1);
     int dy = abs(y2 - y1);
     int sx = x1 < x2 ? 1 : -1;
@@ -85,4 +81,4 @@ void Tool::draw_line(int x1, int y1, int x2, int y2, std::array<float, 3>& color
 }
 
 
-void Tool::hold(int x, int y, std::array<float, 3>& color) {};
+void Tool::hold(int x, int y, std::array<Uint8, 3>& color) {};

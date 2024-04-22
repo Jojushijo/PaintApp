@@ -10,6 +10,8 @@
 #include "tool.h"
 #include "brush.h"
 #include "line.h"
+#include "circle.h"
+#include "bucket.h"
 
 // Define constants for window resolution
 const int WINDOW_WIDTH = 1280;
@@ -93,7 +95,8 @@ static void DisplayMainMenuBar() {
 
         // Filter menu
         if (ImGui::BeginMenu(ICON_FA_WAND_MAGIC_SPARKLES " Filter")) {
-            if (ImGui::MenuItem("Blur")) {
+            if (ImGui::MenuItem("Invert")) {
+                std::cout << "invert" << std::endl;
             }
             ImGui::EndMenu();
         }
@@ -114,7 +117,7 @@ static void DisplayMainMenuBar() {
 }
 
 // ToolBox
-static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<float, 3>& main_color, std::array<float, 3>& alt_color) {
+static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& canvas, std::array<Uint8, 3>& main_color, std::array<Uint8, 3>& alt_color) {
     ImGui::SetNextWindowSizeConstraints(ImVec2(250, 175), ImVec2(250, 175)); // Fixed size
     ImGui::Begin(tool_box_title.c_str(), NULL, ImGuiWindowFlags_NoResize);
 
@@ -129,6 +132,7 @@ static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& 
     // Fill Tool
     ImGui::SameLine();
     if (ImGui::Button(ICON_FA_BUCKET)) {
+        current_tool = new Bucket(canvas);
         tool_box_title = "ToolBox - Bucket";
     };
     ImGui::SetItemTooltip("Fill | CTRL+B");
@@ -144,14 +148,32 @@ static void DisplayToolbox(SDL_Renderer* renderer, Tool*& current_tool, Canvas& 
     // Circle Tool
     ImGui::SameLine();
     if (ImGui::Button(ICON_FA_COMPASS_DRAFTING)) {
+        current_tool = new Circle(canvas);
         tool_box_title = "ToolBox - Circle";
-    }; // ICON_FA_CIRCLE_NOTCH, ICON_FA_CIRCLE_DOT
-    ImGui::SetItemTooltip("Draw Ellipse | CTRL+E");
+    };
+
+    ImGui::SetItemTooltip("Draw Circle | CTRL+E");
 
     ImGui::SeparatorText("Colors");
 
-    ImGui::ColorEdit3("Primary", (float*)&main_color);
-    ImGui::ColorEdit3("Secondary", (float*)&alt_color);
+    static float col1[3] = { 0.0f, 0.0f, 0.0f };
+    static float col2[3] = { 1.0f, 1.0f, 1.0f };
+
+    ImGui::ColorEdit3("Primary", (float*)&col1);
+    ImGui::ColorEdit3("Secondary", (float*)&col2);
+
+    main_color = {
+       static_cast<Uint8>(col1[0] * 255),
+       static_cast<Uint8>(col1[1] * 255),
+       static_cast<Uint8>(col1[2] * 255)
+    };
+
+    alt_color = {
+        static_cast<Uint8>(col2[0] * 255),
+        static_cast<Uint8>(col2[1] * 255),
+        static_cast<Uint8>(col2[2] * 255)
+    };
+
     ImGui::End();
 }
 
@@ -233,8 +255,8 @@ int main(int, char**) {
     Tool* current_tool;
     current_tool = new Brush(main_canvas);
 
-    std::array<float, 3> main_color = { 0,0,0 };
-    std::array<float, 3> alt_color = { 1.0,1.0,1.0 };
+    std::array<Uint8, 3> main_color = { 0, 0, 0 };
+    std::array<Uint8, 3> alt_color = { 255, 255, 255 };
 
     bool done = false;
 
