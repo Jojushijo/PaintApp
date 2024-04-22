@@ -27,14 +27,14 @@ public:
     bool drawing;
     std::string tool = "brush";
     SDL_Surface* surface;
-    std::array<float, 3> bodycolor;
+    std::array<Uint8, 3> bodycolor;
 
     Canvas(int x1 = 0,
         int y1 = 0,
         int x2 = 0,
         int y2 = 0,
         bool drawing = false,
-        std::array<float, 3> bodycolor = { 255, 255, 255 })
+        std::array<Uint8, 3> bodycolor = { 255, 255, 255 })
         : x1(x1), y1(y1), x2(x2), y2(y2), drawing(drawing), bodycolor(bodycolor), surface(SDL_CreateRGBSurface(0, w, h, 24, 0, 0, 0, 0)) {
     }
 
@@ -47,10 +47,10 @@ void Canvas::draw() {
 }
 
 /*public:
-    Canvas(int w, int h, std::array<float, 3> &bodycolor) : w(w), h(h), bodycolor(bodycolor)
+    Canvas(int w, int h, std::array<Uint8, 3> &bodycolor) : w(w), h(h), bodycolor(bodycolor)
     {
 
-     /*    std::array<float, 3> getColor() const
+     /*    std::array<Uint8, 3> getColor() const
         {
             return bodycolor;
         }

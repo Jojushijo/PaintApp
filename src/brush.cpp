@@ -13,7 +13,6 @@ void Brush::set_start(int x, int y, std::array<Uint8, 3>& color) {
 }
 
 
-// An implementation of Bresenham's line algorithm https://en.wikipedia.org/wiki/Bresenham%27s_line_algorithm
 void Brush::hold(int x, int y, std::array<Uint8, 3>& color) {
     draw_line(x, y, this->x, this->y, color, 5);
 
